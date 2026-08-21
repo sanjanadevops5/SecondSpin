@@ -21,7 +21,15 @@ This documentation suite covers:
 - **[DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md):** Step-by-step phased execution plan from setup to deployment.
 
 ## Current Status
-All documentation is currently in **Draft/Initial Release** phase. As the product evolves, these documents will be updated to reflect architecture pivots or scope changes.
+**Phase 1: Engineering Foundation** - The repository structure has been created, and basic documentation is set up. 
+
+## Component Documentation
+Further engineering documentation for each specific module can be found within their respective directories:
+- [Backend (REST API)](../backend/README.md)
+- [Web Application](../web/README.md)
+- [Mobile Application](../mobile/README.md)
+- [Database](../database/README.md)
+- [Tests](../tests/README.md)
 
 ## Future Considerations
 As the team expands or the product scales, additional documentation (such as API contracts, database schemas, and contribution guidelines) will be added to this directory.

@@ -18,10 +18,77 @@ College students frequently need to buy course materials and living essentials f
 *(Both frontends consume the exact same Flask REST API and MongoDB database).*
 
 ## Current Status
-**Phase 0: Product Definition** - We are currently defining the product requirements, scope, architecture, and development plan. No application code has been implemented yet.
+**Phase 1: Engineering Foundation** - Initial repository structure and basic Flask REST API boilerplate have been established. No marketplace business logic is implemented yet.
 
 ## Future Considerations
 While our immediate focus is on delivering a robust MVP for a single campus, SecondSpin is architected with scalability in mind. Future features may include AI-based product recommendations, ML price predictions, QR-based transaction verification, and expansion to a multi-campus network.
+
+---
+
+## Local Setup and Development
+
+### Prerequisites
+- Python 3.9+
+- MongoDB Atlas cluster (or local MongoDB)
+
+### Repository Structure
+- `backend/`: Python Flask REST API
+- `web/`: Responsive Web Application (Planned)
+- `mobile/`: Flutter Mobile Application (Planned)
+- `database/`: Database scripts and schemas (Planned)
+- `tests/`: Automated test suite
+- `docs/`: Foundational product documentation
+
+### Installation
+1. Clone the repository.
+2. Create and activate a Python virtual environment:
+   ```bash
+   python -m venv venv
+   # Windows:
+   venv\Scripts\activate
+   # macOS/Linux:
+   source venv/bin/activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r backend/requirements.txt
+   ```
+4. Configure environment:
+   Copy `.env.example` to `.env` and fill in your values. Do not commit `.env`.
+
+### Running the Backend
+From the root directory:
+
+**Windows (Command Prompt):**
+```cmd
+set FLASK_APP=backend.app
+set FLASK_ENV=development
+flask run
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:FLASK_APP="backend.app"
+$env:FLASK_ENV="development"
+flask run
+```
+
+**macOS / Linux:**
+```bash
+export FLASK_APP=backend.app
+export FLASK_ENV=development
+flask run
+```
+
+*(Alternatively, you can just run `python -m backend.app` on any platform).*
+
+The health endpoint will be available at `http://127.0.0.1:5000/api/health`.
+
+### Running Tests
+Execute the independent test suite using pytest from the repository root:
+```bash
+pytest tests/
+```
 
 ---
 
