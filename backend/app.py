@@ -2,7 +2,7 @@ import logging
 from flask import Flask
 from flask_cors import CORS
 from .config import Config
-from .routes import api_bp
+from .routes import api_v1_bp
 from .errors import register_error_handlers
 
 
@@ -11,8 +11,9 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Configure CORS
-    CORS(app)
+    # Configure CORS securely from environment
+    cors_origins = app.config.get('CORS_ORIGINS', '*')
+    CORS(app, resources={r"/api/*": {"origins": cors_origins}})
 
     # Configure logging
     logging.basicConfig(
@@ -27,7 +28,7 @@ def create_app(config_class=Config):
     init_app(app)
 
     # Register blueprints
-    app.register_blueprint(api_bp)
+    app.register_blueprint(api_v1_bp)
 
     # Register error handlers
     register_error_handlers(app)

@@ -61,6 +61,20 @@ Run tests using pytest from the repository root:
 pytest tests/
 ```
 
+- [x] Application Factory implementation
+- [x] Database Configuration & Abstraction
+- [x] Phase 3: Flask REST API Foundation (Modular routes, error handling, validation, JSON standard)
+- [ ] Future phases (Auth, Routes, Models)
+
+## Structure
+- `app.py`: Flask Application Factory
+- `config.py`: Environment configuration loading
+- `db.py`: MongoDB connection management
+- `errors.py`: Global API error handlers matching standard JSON envelope
+- `responses.py`: Standard API response formatting
+- `validation.py`: JSON request validation utilities
+- `routes/`: Modular endpoints (`/api/v1/health` currently implemented)
+
 ## Conventions
 - Keep route logic in `routes.py` (or separate route files once models are introduced).
 - Keep application configuration in `config.py`.
