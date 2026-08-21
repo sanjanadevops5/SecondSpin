@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 # Load environment variables from .env file if present
 load_dotenv()
 
+
 class Config:
     """Base configuration."""
     MONGODB_URI = os.environ.get('MONGODB_URI')

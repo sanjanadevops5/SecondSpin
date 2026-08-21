@@ -1,8 +1,9 @@
 from flask import jsonify
 
+
 def register_error_handlers(app):
     """Register application-wide error handlers."""
-    
+
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({'error': 'Bad Request', 'message': str(error)}), 400

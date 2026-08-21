@@ -5,6 +5,7 @@ from .config import Config
 from .routes import api_bp
 from .errors import register_error_handlers
 
+
 def create_app(config_class=Config):
     """Create and configure the Flask application."""
     app = Flask(__name__)
@@ -31,6 +32,7 @@ def create_app(config_class=Config):
     register_error_handlers(app)
 
     return app
+
 
 if __name__ == '__main__':
     app = create_app()
