@@ -22,8 +22,9 @@ def create_app(config_class=Config):
     # Ensure secrets/tokens aren't logged easily
     app.logger.info("Application starting up...")
 
-    # Initialize extensions (Database etc. will go here later)
-    # e.g., init_db(app)
+    # Initialize extensions
+    from .db import init_app
+    init_app(app)
 
     # Register blueprints
     app.register_blueprint(api_bp)
