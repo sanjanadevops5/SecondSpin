@@ -1,203 +1,34 @@
-# ♻️ SecondSpin
+# SecondSpin ♻️
 
-### The trusted campus marketplace for giving pre-owned items a second life.
+**The Campus-Exclusive Marketplace for College Students**
 
-SecondSpin is a **campus-exclusive marketplace** designed to make buying, selling, and exchanging pre-owned items within a college community simple, affordable, and trustworthy.
+## Purpose
+SecondSpin is a dedicated, secure, and intuitive marketplace designed specifically for college students. It provides a platform to seamlessly buy, sell, and exchange pre-owned items—such as textbooks, electronics, bicycles, and hostel essentials—within their trusted college community. 
 
-From textbooks and scientific calculators to electronics, bicycles, and hostel essentials, SecondSpin connects students who have items to sell with students who need them — all within their campus community.
+## Context
+College students frequently need to buy course materials and living essentials for short-term use, and later need to sell them when they graduate or finish a semester. Generic marketplaces (like Craigslist or Facebook Marketplace) lack campus-specific trust, involve logistical hurdles for item handover, and often expose students to scams. SecondSpin solves this by restricting access to verified students, enabling safe, on-campus transactions.
 
----
+## Product Architecture Snapshot
+- **Backend:** Python Flask REST API
+- **Database:** MongoDB Atlas
+- **Frontends:** 
+  - Responsive Web Application
+  - Flutter Mobile Application (iOS & Android)
 
-## 🚀 Why SecondSpin?
+*(Both frontends consume the exact same Flask REST API and MongoDB database).*
 
-General marketplaces are designed for large, anonymous audiences. Students often need something much simpler:
+## Current Status
+**Phase 0: Product Definition** - We are currently defining the product requirements, scope, architecture, and development plan. No application code has been implemented yet.
 
-* Find affordable items from fellow students
-* Sell unused items without dealing with strangers
-* Avoid shipping and complicated logistics
-* Build trust through a campus-based community
-* Give useful products a **second spin** instead of throwing them away
-
-SecondSpin brings all of this into one platform.
-
----
-
-## ✨ Key Features
-
-### 🛍️ Campus Marketplace
-
-Browse and discover pre-owned products listed by students.
-
-### 🔎 Smart Search & Filtering
-
-Find products by category, price, condition, and other attributes.
-
-### 📦 Easy Selling
-
-Students can create, update, and manage their own listings.
-
-### ❤️ Wishlist
-
-Save products for later and keep track of items you're interested in.
-
-### 🤝 Purchase Requests
-
-Buyers can send requests directly to sellers, who can accept or reject them.
-
-### 🔄 Transaction Tracking
-
-Manage the complete journey from listing to completed transaction.
-
-### ⭐ Trust & Reviews
-
-Build accountability through seller ratings and transaction-based reviews.
-
-### 📊 Marketplace Insights
-
-Provide administrators with insights into listings, transactions, popular categories, and platform activity.
-
-### 💡 Smart Price Insights
-
-Use historical marketplace data to provide meaningful price insights for similar products.
-
-### 📱 Web + Mobile
-
-Access the same marketplace through a responsive web platform and dedicated mobile application.
+## Future Considerations
+While our immediate focus is on delivering a robust MVP for a single campus, SecondSpin is architected with scalability in mind. Future features may include AI-based product recommendations, ML price predictions, QR-based transaction verification, and expansion to a multi-campus network.
 
 ---
 
-## 🏗️ System Architecture
-
-```text
-                 ┌──────────────────┐
-                 │   Web Application │
-                 └────────┬─────────┘
-                          │
-                          │
-                 ┌────────▼─────────┐
-                 │   Flask REST API │
-                 └────────┬─────────┘
-                          │
-                 ┌────────▼─────────┐
-                 │  MongoDB Atlas   │
-                 └────────▲─────────┘
-                          │
-                 ┌────────┴─────────┐
-                 │  Flutter Mobile  │
-                 │    Application   │
-                 └──────────────────┘
-```
-
-Both the web and mobile applications communicate with a **shared Flask REST API**, ensuring a consistent marketplace experience across platforms.
-
----
-
-## 🛠️ Technology Stack
-
-| Layer            | Technology                       |
-| ---------------- | -------------------------------- |
-| Web Frontend     | HTML, CSS, JavaScript, Bootstrap |
-| Mobile           | Flutter                          |
-| Backend          | Python, Flask                    |
-| API              | REST API                         |
-| Database         | MongoDB                          |
-| Database Hosting | MongoDB Atlas                    |
-| Version Control  | Git & GitHub                     |
-
----
-
-## 🧠 Database & Backend
-
-SecondSpin uses MongoDB's document-oriented architecture to handle the flexible nature of marketplace products.
-
-Different categories can have different attributes without forcing every product into the same rigid structure.
-
-Core data includes:
-
-```text
-Users
-Products
-Categories
-Wishlists
-Purchase Requests
-Transactions
-Reviews
-Reports
-```
-
-The backend exposes RESTful APIs that allow both the website and mobile application to interact with the same underlying data.
-
----
-
-## 🔐 Trust & Safety
-
-SecondSpin is designed around a **campus-first trust model**.
-
-Planned mechanisms include:
-
-* Student-focused registration
-* User authentication
-* Seller profiles
-* Transaction history
-* Seller ratings
-* Listing reports
-* Administrative moderation
-
-The goal is to create a marketplace where students can transact within a familiar community rather than with unknown users across the internet.
-
----
-
-## 🌱 Sustainability
-
-SecondSpin is not only about buying and selling.
-
-By encouraging students to reuse products instead of discarding them, the platform promotes:
-
-**Reuse → Reduced waste → Affordable access → Sustainable campus**
-
-Every transaction gives an existing product another opportunity to be useful.
-
----
-
-## 🎯 Project Vision
-
-Our vision is to build a **trusted digital marketplace for campus communities**, where students can easily exchange resources, reduce unnecessary spending, and extend the useful life of products.
-
-> **Buy smart. Sell easy. Give it a SecondSpin.**
-
----
-
-## 📌 Project Status
-
-🚧 **Currently under development**
-
-The project is being developed as a full-stack academic project with a focus on:
-
-* Scalable backend architecture
-* Database-driven functionality
-* Cross-platform accessibility
-* User experience
-* Real-world marketplace workflows
-
----
-
-## 🔮 Future Scope
-
-Potential future enhancements include:
-
-* AI-powered product recommendations
-* Advanced price prediction
-* Campus pickup-point integration
-* Push notifications
-* In-app messaging
-* QR-based transaction verification
-* Multi-campus marketplace support
-
----
-
-## 👨‍💻 Project
-
-**SecondSpin**
-*A campus-exclusive marketplace for the next owner.*
-
-Built as a Database Management Systems project with a focus on applying database and full-stack development concepts to a real-world problem.
+### Documentation
+For detailed product specifications, architecture, and development plans, please refer to the `docs/` directory:
+- [Product Requirements Document (PRD)](docs/PRD.md)
+- [Project Scope](docs/PROJECT_SCOPE.md)
+- [Features List](docs/FEATURES.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Development Plan](docs/DEVELOPMENT_PLAN.md)
