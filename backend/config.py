@@ -13,7 +13,11 @@ class Config:
     FLASK_ENV = os.environ.get('FLASK_ENV', 'development')
     
     # CORS Configuration
-    # In production, this should be a comma-separated list of allowed origins.
-    # E.g., 'https://secondspin.com,https://app.secondspin.com'
-    # Defaulting to '*' for development, but it will be overridden in prod.
     CORS_ORIGINS = os.environ.get('CORS_ORIGINS', '*').split(',')
+
+    # JWT Configuration
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', SECRET_KEY)
+    JWT_EXPIRES_IN = int(os.environ.get('JWT_EXPIRES_IN', 86400)) # Default 24 hours
+    
+    # Verification Configuration
+    ALLOWED_EMAIL_DOMAINS = os.environ.get('ALLOWED_EMAIL_DOMAINS', 'student.college.edu,college.edu').split(',')
