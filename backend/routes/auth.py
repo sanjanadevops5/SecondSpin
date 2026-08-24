@@ -66,8 +66,8 @@ def login():
     token = jwt.encode({
         'sub': str(user['_id']),
         'role': user.get('role', 'student'),
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=expires_in),
-        'iat': datetime.datetime.utcnow()
+        'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=expires_in),
+        'iat': datetime.datetime.now(datetime.timezone.utc)
     }, secret, algorithm="HS256")
     
     # Return token but NEVER password_hash

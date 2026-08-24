@@ -6,7 +6,7 @@ import mongomock
 class TestConfig(Config):
     TESTING = True
     FLASK_ENV = 'testing'
-    JWT_SECRET_KEY = 'test-secret'
+    JWT_SECRET_KEY = 'test-secret-key-must-be-32-bytes-long'
 
 
 @pytest.fixture

@@ -11,8 +11,8 @@ The current base prefix for all endpoints is: `/api/v1`
 We use URI versioning. The current version is `v1`.
 All new endpoints must be placed under `/api/v1`.
 
-## 4. Authentication Placeholder
-Authentication is **planned for Phase 4**. Currently, the API foundation is established, but endpoints do not require authentication tokens. 
+## 4. Authentication
+Authentication is **implemented** as part of Phase 4. Endpoints require JWT authentication tokens passed in the `Authorization: Bearer <token>` header.
 
 ## 5. Request Format
 - All requests containing a payload must set the `Content-Type: application/json` header.

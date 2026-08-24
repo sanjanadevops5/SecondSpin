@@ -35,8 +35,8 @@ class UserModel:
             'verification_status': verification_status,
             'account_status': 'ACTIVE',
             'profile': {},
-            'created_at': datetime.datetime.utcnow(),
-            'updated_at': datetime.datetime.utcnow()
+            'created_at': datetime.datetime.now(datetime.timezone.utc),
+            'updated_at': datetime.datetime.now(datetime.timezone.utc)
         }
         
         result = UserModel.collection().insert_one(user_doc)
@@ -71,7 +71,7 @@ class UserModel:
                 {
                     '$set': {
                         **updates,
-                        'updated_at': datetime.datetime.utcnow()
+                        'updated_at': datetime.datetime.now(datetime.timezone.utc)
                     }
                 }
             )
