@@ -3,6 +3,8 @@ from flask import Flask
 from flask_cors import CORS
 from .config import Config
 from .routes import api_v1_bp
+from .routes.categories import categories_bp
+from .routes.products import products_bp
 from .errors import register_error_handlers
 
 
@@ -29,6 +31,8 @@ def create_app(config_class=Config):
 
     # Register blueprints
     app.register_blueprint(api_v1_bp)
+    app.register_blueprint(categories_bp, url_prefix='/api/v1/categories')
+    app.register_blueprint(products_bp, url_prefix='/api/v1/products')
 
     # Register error handlers
     register_error_handlers(app)

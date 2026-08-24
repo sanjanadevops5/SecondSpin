@@ -65,11 +65,17 @@ Cross-Origin Resource Sharing is enabled for configured origins via the `CORS_OR
 ## 11. Validation Strategy
 We use a lightweight `@validate_json` decorator to assert required fields and basic type checking on incoming payloads before they hit route logic. This keeps controllers clean and predictable.
 
-## 12. Future Endpoint Organization (Planned)
-- `/api/v1/auth` - Authentication and tokens
-- `/api/v1/users` - User management
-- `/api/v1/products` - Vinyl records marketplace
-- `/api/v1/categories` - Genres and product categorizations
+## 12. Implemented Endpoints
+- `/api/v1/health` - Health check
+- `/api/v1/auth/register` - User registration
+- `/api/v1/auth/login` - User login
+- `/api/v1/users/me` - User profile management
+- `/api/v1/categories` - Product categories retrieval
+- `/api/v1/products` - Marketplace discovery (search, filter, paginate) and creation
+- `/api/v1/products/me` - Fetch authenticated user's listings
+- `/api/v1/products/<id>` - Retrieve, update, and remove listings
+
+## 13. Future Endpoint Organization (Planned)
 - `/api/v1/wishlist` - User saved items
 - `/api/v1/purchase-requests` - Offers on products
 - `/api/v1/transactions` - Completed sales

@@ -65,7 +65,8 @@ pytest tests/
 - [x] Database Configuration & Abstraction
 - [x] Phase 3: Flask REST API Foundation (Modular routes, error handling, validation, JSON standard)
 - [x] Phase 4: Authentication, Authorization & User Management
-- [ ] Future phases (Marketplace, Routes, Models)
+- [x] Phase 5: Marketplace Core (Products, Categories, Discovery)
+- [ ] Future phases (Transactions, Reviews, Admin)
 
 ## Structure
 - `app.py`: Flask Application Factory
