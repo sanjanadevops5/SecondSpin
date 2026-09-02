@@ -177,3 +177,69 @@ def test_unrelated_user_access(client, users, product):
     
     res = client.get(f'/api/v1/purchase-requests/{req_id}', headers=other_headers)
     assert res.status_code == 403
+
+def test_new_request_after_rejection(client, users, product):
+    """A buyer whose previous request was REJECTED can submit a fresh request for the same product."""
+    buyer_headers, buyer_id = users['buyer']
+    seller_headers, seller_id = users['seller']
+
+    # Step 1: Buyer creates initial request
+    res = client.post('/api/v1/purchase-requests/', headers=buyer_headers, json={'product_id': product})
+    assert res.status_code == 201
+    first_req_id = res.get_json()['data']['request_id']
+
+    # Step 2: Seller rejects
+    res = client.patch(f'/api/v1/purchase-requests/{first_req_id}/reject', headers=seller_headers)
+    assert res.status_code == 200
+
+    # Step 3: Verify first request is REJECTED
+    import backend.db
+    first_req = backend.db.get_db().purchase_requests.find_one({'_id': __import__('bson').ObjectId(first_req_id)})
+    assert first_req['status'] == 'REJECTED'
+
+    # Step 4: Buyer submits a new request for the same product — must succeed
+    res = client.post('/api/v1/purchase-requests/', headers=buyer_headers, json={'product_id': product})
+    assert res.status_code == 201, f"Expected 201 but got {res.status_code}: {res.get_json()}"
+    second_req_id = res.get_json()['data']['request_id']
+    assert second_req_id != first_req_id
+
+    # Step 5: Verify new request is PENDING
+    second_req = backend.db.get_db().purchase_requests.find_one({'_id': __import__('bson').ObjectId(second_req_id)})
+    assert second_req['status'] == 'PENDING'
+
+    # Step 6: Verify old request still REJECTED
+    first_req = backend.db.get_db().purchase_requests.find_one({'_id': __import__('bson').ObjectId(first_req_id)})
+    assert first_req['status'] == 'REJECTED'
+
+def test_new_request_after_cancellation(client, users, product):
+    """A buyer who CANCELLED their previous request can submit a fresh request for the same product."""
+    buyer_headers, buyer_id = users['buyer']
+
+    # Step 1: Buyer creates initial request
+    res = client.post('/api/v1/purchase-requests/', headers=buyer_headers, json={'product_id': product})
+    assert res.status_code == 201
+    first_req_id = res.get_json()['data']['request_id']
+
+    # Step 2: Buyer cancels
+    res = client.patch(f'/api/v1/purchase-requests/{first_req_id}/cancel', headers=buyer_headers)
+    assert res.status_code == 200
+
+    # Step 3: Verify first request is CANCELLED
+    import backend.db
+    first_req = backend.db.get_db().purchase_requests.find_one({'_id': __import__('bson').ObjectId(first_req_id)})
+    assert first_req['status'] == 'CANCELLED'
+
+    # Step 4: Buyer submits a new request for the same product — must succeed
+    res = client.post('/api/v1/purchase-requests/', headers=buyer_headers, json={'product_id': product})
+    assert res.status_code == 201, f"Expected 201 but got {res.status_code}: {res.get_json()}"
+    second_req_id = res.get_json()['data']['request_id']
+    assert second_req_id != first_req_id
+
+    # Step 5: Verify new request is PENDING
+    second_req = backend.db.get_db().purchase_requests.find_one({'_id': __import__('bson').ObjectId(second_req_id)})
+    assert second_req['status'] == 'PENDING'
+
+    # Step 6: Verify old request still CANCELLED
+    first_req = backend.db.get_db().purchase_requests.find_one({'_id': __import__('bson').ObjectId(first_req_id)})
+    assert first_req['status'] == 'CANCELLED'
+
