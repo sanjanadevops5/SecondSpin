@@ -59,7 +59,7 @@ class UserModel:
     def verify_password(password_hash, plain_password):
         """Verify the password hash."""
         return check_password_hash(password_hash, plain_password)
-        
+
     @staticmethod
     def update_profile(user_id, updates):
         """
@@ -76,5 +76,83 @@ class UserModel:
                 }
             )
             return True
-        except:
+        except Exception:
             return False
+        
+    @staticmethod
+    def setup_indexes():
+        """Creates the necessary indexes for the users collection."""
+        collection = UserModel.collection()
+        collection.create_index('email', unique=True, sparse=True)
+        collection.create_index('role')
+        collection.create_index('account_status')
+
+    @staticmethod
+    def sanitize_user(user):
+        """Removes sensitive fields like password_hash from user dictionary."""
+        if not user:
+            return None
+        user_copy = dict(user)
+        user_copy['_id'] = str(user_copy['_id'])
+        user_copy.pop('password_hash', None)
+        return user_copy
+
+    @staticmethod
+    def get_all(page=1, limit=20, role=None, account_status=None):
+        """Retrieve paginated users for admin management."""
+        filters = {}
+        if role:
+            filters['role'] = role
+        if account_status:
+            filters['account_status'] = account_status
+
+        skip = (page - 1) * limit
+        collection = UserModel.collection()
+        cursor = collection.find(filters).sort('created_at', -1).skip(skip).limit(limit)
+        items = [UserModel.sanitize_user(u) for u in cursor]
+        total = collection.count_documents(filters)
+
+        return {
+            'items': items,
+            'pagination': {
+                'page': page,
+                'limit': limit,
+                'total': total,
+                'pages': (total + limit - 1) // limit if total > 0 else 1
+            }
+        }
+
+    @staticmethod
+    def update_status(user_id, status):
+        """Update account status of a user (e.g. ACTIVE, SUSPENDED)."""
+        try:
+            result = UserModel.collection().update_one(
+                {'_id': ObjectId(user_id)},
+                {
+                    '$set': {
+                        'account_status': status,
+                        'updated_at': datetime.datetime.now(datetime.timezone.utc)
+                    }
+                }
+            )
+            return result.modified_count > 0 or result.matched_count > 0
+        except Exception:
+            return False
+
+    @staticmethod
+    def update_role(user_id, role):
+        """Update role of a user (e.g. student, admin)."""
+        try:
+            result = UserModel.collection().update_one(
+                {'_id': ObjectId(user_id)},
+                {
+                    '$set': {
+                        'role': role,
+                        'updated_at': datetime.datetime.now(datetime.timezone.utc)
+                    }
+                }
+            )
+            return result.modified_count > 0 or result.matched_count > 0
+        except Exception:
+            return False
+

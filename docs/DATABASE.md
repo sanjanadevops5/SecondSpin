@@ -231,3 +231,35 @@ Stores post-transaction reviews written by one participant about the other. Tied
 - `reviewee_id` — For fetching a user's received reviews (trust/seller profile).
 - `reviewer_id` — For fetching all reviews authored by a user.
 
+---
+
+### 1.8 `reports` (Phase 8)
+Stores user and listing moderation reports for trust & safety administration.
+
+- `_id`: ObjectId
+- `reporter_id`: String — References `users._id`. Always derived from JWT authentication.
+- `target_type`: String (Enum: `PRODUCT`, `USER`)
+- `target_id`: String — References `products._id` or `users._id` depending on `target_type`.
+- `reason`: String — Short category reason for report (max 100 characters).
+- `description`: String — Optional detailed description (max 1000 characters).
+- `status`: String (Enum: `OPEN`, `REVIEWING`, `RESOLVED`, `DISMISSED`)
+- `created_at`: Datetime UTC
+- `updated_at`: Datetime UTC
+- `resolved_at`: Datetime UTC or `null`
+- `resolved_by`: String or `null` — References `users._id` of resolving admin.
+
+**Status Lifecycle:**
+```
+OPEN ──► REVIEWING ──► RESOLVED
+OPEN ──► RESOLVED
+OPEN ──► DISMISSED
+REVIEWING ──► DISMISSED
+```
+
+**Indexes:**
+- `(reporter_id, status)` — Compound index for fetching reporter's reports.
+- `(target_type, target_id)` — Compound index for querying reports per target.
+- `status` — Index for filtering open/reviewing reports.
+- `created_at` — Index for temporal sorting.
+
+

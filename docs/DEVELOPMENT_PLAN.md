@@ -7,7 +7,7 @@ To break down the software development lifecycle into logical, manageable phases
 Following this plan guarantees that progress can be tracked efficiently, testability is maintained at each step, and we avoid the trap of building frontends without a working backend.
 
 ## Current Status
-Phase 6 complete. Entering Phase 7.
+Phase 8 complete. Entering Phase 9.
 
 ---
 
@@ -65,14 +65,14 @@ Phase 6 complete. Entering Phase 7.
 - **Tasks:** Mark items Sold when a transaction is confirmed. Record transaction history. Allow buyers to leave reviews and ratings for sellers.
 - **Deliverables:** Transactions API (`/api/v1/transactions`) and Reviews API (`/api/v1/reviews`).
 - **Dependencies:** Phase 6.
-- **Definition of Done:** Seller rating updates automatically when a review is submitted, and product status moves to SOLD upon transaction completion.
+- **Definition of Done:** Seller rating updates automatically when a review is submitted, and product status moves to SOLD upon transaction completion. *(Complete)*
 
 ### Phase 8: Admin Dashboard & Analytics
 - **Objective:** Platform moderation and insight tools.
 - **Tasks:** Admin-only routes, user/listing reporting system, aggregation queries for marketplace statistics, user management (ban/suspend).
 - **Deliverables:** Admin API endpoints (`/api/v1/admin`, `/api/v1/reports`).
 - **Dependencies:** Phase 7.
-- **Definition of Done:** Admin role can fetch reported items, manage users, and view system stats.
+- **Definition of Done:** Admin role can fetch reported items, manage users, and view system stats. *(Complete)*
 
 ### Phase 9: Smart Features
 - **Objective:** Implement advanced logic and recommendations.

@@ -599,9 +599,152 @@ Returns the full detail of a single review.
 
 **Error Responses:** 401 | 404 `NOT_FOUND`
 
+
 ---
 
-## 15. Future Endpoint Organization (Planned)
-- `/api/v1/reports` - Content moderation and reporting
-- `/api/v1/admin` - Administrative user and listing management
-- `/api/v1/analytics` - Platform metrics and insights
+## 15. Reports — `/api/v1/reports`
+All endpoints require `Authorization: Bearer <token>`.
+
+#### `POST /api/v1/reports/`
+Submits a report against a product or user for trust & safety moderation.
+
+**Auth:** Required
+
+**Request Body:**
+```json
+{
+  "target_type": "PRODUCT | USER",
+  "target_id": "<string>",
+  "reason": "<string, max 100 chars>",
+  "description": "<optional string, max 1000 chars>"
+}
+```
+
+**Success (201):** `{ "success": true, "data": { "report_id": "<string>", "message": "Report submitted successfully." } }`
+
+**Error Responses:** 401 | 400 `INVALID_TARGET_TYPE` / `INVALID_REASON` | 404 `NOT_FOUND` | 409 `DUPLICATE_REPORT`
+
+---
+
+#### `GET /api/v1/reports/<report_id>`
+Retrieves detail of a single report. Accessible by the reporter or an admin.
+
+**Auth:** Required (Reporter or Admin)
+
+**Success (200):** `{ "success": true, "data": { ...report fields... } }`
+
+**Error Responses:** 401 | 403 `FORBIDDEN` | 404 `NOT_FOUND`
+
+---
+
+## 16. Admin & Analytics — `/api/v1/admin`
+All endpoints require `Authorization: Bearer <token>` AND user role `admin`.
+
+Non-admin requests return `403 FORBIDDEN`.
+
+---
+
+#### `GET /api/v1/admin/users`
+Paginated list of all users. Sanitized (never returns `password_hash`).
+
+**Query Params:** `page` (default 1), `limit` (default 20), `role` (`student`/`admin`), `status` (`ACTIVE`/`SUSPENDED`)
+
+**Success (200):** `{ "success": true, "data": { "items": [ { ...user fields... } ], "pagination": { ... } } }`
+
+---
+
+#### `GET /api/v1/admin/users/<user_id>`
+Retrieve single user detail. Sanitized (no `password_hash`).
+
+**Success (200):** `{ "success": true, "data": { ...user fields... } }`
+
+---
+
+#### `PATCH /api/v1/admin/users/<user_id>/status`
+Updates account status of a user (`ACTIVE` or `SUSPENDED`).
+
+**Request Body:** `{ "status": "ACTIVE | SUSPENDED" }`
+
+**Business Rules:** Admin cannot suspend their own admin account.
+
+---
+
+#### `PATCH /api/v1/admin/users/<user_id>/role`
+Updates user role (`student` or `admin`).
+
+**Request Body:** `{ "role": "student | admin" }`
+
+**Business Rules:** Admin cannot demote their own admin account.
+
+---
+
+#### `GET /api/v1/admin/products`
+Lists products for moderation, including `REMOVED` products.
+
+**Query Params:** `page`, `limit`, `status`
+
+---
+
+#### `PATCH /api/v1/admin/products/<product_id>/status`
+Moderates product status (`ACTIVE`, `RESERVED`, `SOLD`, `REMOVED`).
+
+**Business Rules:** Cannot transition `SOLD` back to `ACTIVE` or `RESERVED`.
+
+---
+
+#### `GET /api/v1/admin/reports`
+Lists moderation reports with optional filters for `status` and `target_type`.
+
+---
+
+#### `GET /api/v1/admin/reports/<report_id>`
+Retrieve report detail.
+
+---
+
+#### `PATCH /api/v1/admin/reports/<report_id>/status`
+Updates report status (`REVIEWING`, `RESOLVED`, `DISMISSED`). Records `resolved_by` and `resolved_at`.
+
+---
+
+#### `GET /api/v1/admin/categories`
+Lists all categories including inactive ones.
+
+---
+
+#### `POST /api/v1/admin/categories`
+Creates a new category.
+
+**Request Body:** `{ "name": "<string>", "slug": "<string>", "description": "<string>", "icon": "<string>" }`
+
+---
+
+#### `PATCH /api/v1/admin/categories/<slug>`
+Updates category fields or `is_active` status.
+
+---
+
+#### `GET /api/v1/admin/analytics/overview`
+Aggregated marketplace overview metrics computed dynamically via MongoDB queries.
+
+**Success (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "users": { "total": 10, "active": 9, "suspended": 1, "students": 8, "admins": 2 },
+    "products": { "total": 15, "active": 10, "reserved": 2, "sold": 2, "removed": 1 },
+    "transactions": { "total": 5, "pending": 1, "reserved": 2, "completed": 2, "cancelled": 0 },
+    "purchase_requests": { "total": 8, "pending": 2, "accepted": 4, "rejected": 1, "cancelled": 1 },
+    "reviews": { "total": 4, "average_rating": 4.5 },
+    "reports": { "total": 2, "open": 1 },
+    "categories": [ { "category_id": "textbooks", "name": "Textbooks", "product_count": 8 } ]
+  }
+}
+```
+
+---
+
+## 17. Future Endpoint Organization (Planned Phase 9+)
+- `/api/v1/analytics/insights` - AI/ML price predictions and recommendations (Phase 9)
+

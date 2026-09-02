@@ -26,12 +26,18 @@ def app(monkeypatch):
         from backend.models.purchase_request import PurchaseRequestModel
         from backend.models.transaction import TransactionModel
         from backend.models.review import ReviewModel
+        from backend.models.user import UserModel
+        from backend.models.category import CategoryModel
+        from backend.models.report import ReportModel
         
         ProductModel.setup_indexes()
         WishlistModel.setup_indexes()
         PurchaseRequestModel.setup_indexes()
         TransactionModel.setup_indexes()
         ReviewModel.setup_indexes()
+        UserModel.setup_indexes()
+        CategoryModel.setup_indexes()
+        ReportModel.setup_indexes()
 
     yield app
 
