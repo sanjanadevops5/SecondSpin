@@ -377,12 +377,231 @@ Buyer cancels their own `PENDING` purchase request.
 - Only `PENDING` → `CANCELLED` is a valid transition.
 - A buyer whose request is `CANCELLED` may submit a new request for the same product.
 
+
 ---
 
-## 13. Future Endpoint Organization (Planned)
-- `/api/v1/transactions` - Completed sales
-- `/api/v1/reviews` - Ratings and feedback
-- `/api/v1/reports` - Content moderation
-- `/api/v1/admin` - Administrative actions
-- `/api/v1/analytics` - Platform metrics
+## 13. Transactions — `/api/v1/transactions`
+All endpoints require `Authorization: Bearer <token>`.
 
+The transaction lifecycle (and corresponding product states) is:
+```
+PENDING  ──► RESERVED   (seller action)  → product stays RESERVED
+PENDING  ──► CANCELLED  (buyer or seller) → product → ACTIVE
+RESERVED ──► COMPLETED  (seller action)  → product → SOLD
+RESERVED ──► CANCELLED  (buyer or seller) → product → ACTIVE
+```
+
+---
+
+#### `POST /api/v1/transactions/`
+Creates a transaction from an ACCEPTED purchase request. Only the buyer of the PR may call this.
+
+**Auth:** Required (must be the buyer of the purchase request)
+
+**Request Body:**
+```json
+{ "purchase_request_id": "<string>" }
+```
+
+**Success (201):**
+```json
+{ "success": true, "data": { "transaction_id": "<string>", "message": "Transaction created. Product is now RESERVED." } }
+```
+
+**Error Responses:**
+| Code | Reason |
+|---|---|
+| 401 | Missing or invalid JWT |
+| 404 `NOT_FOUND` | Purchase request not found |
+| 403 `FORBIDDEN` | Caller is not the buyer of the purchase request |
+| 400 `INVALID_STATE` | Purchase request is not in ACCEPTED status |
+| 404 `NOT_FOUND` | Product not found |
+| 400 `UNAVAILABLE` | Product is SOLD or REMOVED |
+| 409 `CONFLICT` | Active transaction already exists for this product |
+| 409 `DUPLICATE_TRANSACTION` | Transaction already exists for this purchase request |
+| 422 | Missing `purchase_request_id` |
+
+**Business Rules:**
+- `buyer_id` and `seller_id` are derived from the purchase request — never client-supplied.
+- Product must be ACTIVE at creation time; atomically moves to RESERVED.
+- If product reservation fails (race condition), the created transaction is auto-cancelled.
+
+---
+
+#### `GET /api/v1/transactions/mine`
+Returns all transactions initiated by the authenticated buyer.
+
+**Auth:** Required
+
+**Success (200):** `{ "success": true, "data": { "items": [ { ...transaction fields... } ] } }`
+
+---
+
+#### `GET /api/v1/transactions/received`
+Returns all transactions involving the authenticated seller's products.
+
+**Auth:** Required
+
+**Success (200):** `{ "success": true, "data": { "items": [ { ...transaction fields... } ] } }`
+
+---
+
+#### `GET /api/v1/transactions/<transaction_id>`
+Returns full detail of a single transaction. Only the buyer or seller may view it.
+
+**Auth:** Required
+
+**Success (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "<string>",
+    "purchase_request_id": "<string>",
+    "product_id": "<string>",
+    "buyer_id": "<string>",
+    "seller_id": "<string>",
+    "status": "PENDING | RESERVED | COMPLETED | CANCELLED",
+    "created_at": "<datetime>",
+    "updated_at": "<datetime>",
+    "completed_at": "<datetime | null>",
+    "cancelled_at": "<datetime | null>"
+  }
+}
+```
+
+**Error Responses:** 401 | 404 `NOT_FOUND` | 403 `FORBIDDEN`
+
+---
+
+#### `PATCH /api/v1/transactions/<id>/reserve`
+Seller confirms meeting arranged: `PENDING → RESERVED`.
+
+**Auth:** Required (seller only)
+
+**Success (200):** `{ "success": true, "message": "Transaction is now RESERVED." }`
+
+**Error Responses:** 401 | 404 | 403 | 400 `INVALID_TRANSITION`
+
+---
+
+#### `PATCH /api/v1/transactions/<id>/complete`
+Seller confirms exchange happened: `RESERVED → COMPLETED`. Product becomes `SOLD`.
+
+**Auth:** Required (seller only)
+
+**Success (200):** `{ "success": true, "message": "Transaction completed. Product is now SOLD." }`
+
+**Error Responses:** 401 | 404 | 403 | 400 `INVALID_TRANSITION`
+
+---
+
+#### `PATCH /api/v1/transactions/<id>/cancel`
+Cancels a `PENDING` or `RESERVED` transaction. Either buyer or seller may cancel. Product returns to `ACTIVE`.
+
+**Auth:** Required (buyer or seller)
+
+**Success (200):** `{ "success": true, "message": "Transaction cancelled. Product is now ACTIVE." }`
+
+**Error Responses:** 401 | 404 | 403 | 400 `INVALID_TRANSITION`
+
+---
+
+## 14. Reviews — `/api/v1/reviews`
+All endpoints require `Authorization: Bearer <token>`.
+
+Reviews are immutable after creation in Phase 7.
+
+---
+
+#### `POST /api/v1/reviews/`
+Submits a review for a completed transaction. Reviewer must be a participant; reviewee must be the other party.
+
+**Auth:** Required
+
+**Request Body:**
+```json
+{
+  "transaction_id": "<string>",
+  "reviewee_id":    "<string>",
+  "rating":         4,
+  "comment":        "<optional string, max 1000 chars>"
+}
+```
+
+**Success (201):**
+```json
+{ "success": true, "data": { "review_id": "<string>", "message": "Review submitted successfully." } }
+```
+
+**Error Responses:**
+| Code | Reason |
+|---|---|
+| 401 | Missing or invalid JWT |
+| 404 `NOT_FOUND` | Transaction not found |
+| 400 `NOT_ELIGIBLE` | Transaction is not COMPLETED |
+| 403 `FORBIDDEN` | Caller is not a participant in this transaction |
+| 400 `SELF_REVIEW` | Reviewer and reviewee are the same user |
+| 403 `INVALID_REVIEWEE` | Reviewee is not the other participant |
+| 400 `INVALID_RATING` | Rating is not an integer 1–5 (booleans, decimals, strings rejected) |
+| 400 `INVALID_COMMENT` | Comment is not a string |
+| 400 `COMMENT_TOO_LONG` | Comment exceeds 1000 characters |
+| 409 `DUPLICATE_REVIEW` | This reviewer has already reviewed this reviewee for this transaction |
+| 422 | Missing required fields |
+
+**Business Rules:**
+- `reviewer_id` is always derived from JWT — never from the request body.
+- `product_id` is always derived from the transaction — never from the request body.
+- Buyer may review Seller; Seller may review Buyer. Both directions are independent.
+- Rating must be a JSON integer (not `true`/`false`, not `4.5`, not `"5"`).
+
+---
+
+#### `GET /api/v1/reviews/product/<product_id>`
+Returns all reviews associated with a product listing.
+
+**Auth:** Required
+
+**Success (200):** `{ "success": true, "data": { "items": [ { ...review fields... } ] } }`
+
+---
+
+#### `GET /api/v1/reviews/user/<user_id>`
+Returns all reviews received by a user (seller trust profile).
+
+**Auth:** Required
+
+**Success (200):** `{ "success": true, "data": { "items": [ { ...review fields... } ] } }`
+
+---
+
+#### `GET /api/v1/reviews/<review_id>`
+Returns the full detail of a single review.
+
+**Auth:** Required
+
+**Success (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "_id": "<string>",
+    "transaction_id": "<string>",
+    "reviewer_id": "<string>",
+    "reviewee_id": "<string>",
+    "product_id": "<string>",
+    "rating": "<integer 1-5>",
+    "comment": "<string>",
+    "created_at": "<datetime>"
+  }
+}
+```
+
+**Error Responses:** 401 | 404 `NOT_FOUND`
+
+---
+
+## 15. Future Endpoint Organization (Planned)
+- `/api/v1/reports` - Content moderation and reporting
+- `/api/v1/admin` - Administrative user and listing management
+- `/api/v1/analytics` - Platform metrics and insights

@@ -140,3 +140,94 @@ Terminal states (`ACCEPTED`, `REJECTED`, `CANCELLED`) cannot transition to any o
 - `(buyer_id, status)` — Compound index for efficiently fetching a buyer's requests by status.
 - `(seller_id, status)` — Compound index for efficiently fetching a seller's incoming requests by status.
 - `(product_id, status)` — Compound index for checking active requests on a product.
+
+---
+
+### 1.6 `transactions`
+Records the physical exchange lifecycle that follows an accepted purchase request. Transactions drive the product reservation and sale state changes.
+
+- `_id`: ObjectId
+- `purchase_request_id`: String — References `purchase_requests._id`. Unique index prevents duplicate transactions per accepted request.
+- `product_id`: String — References `products._id`.
+- `buyer_id`: String — References `users._id`. Always derived from the accepted purchase request; never client-supplied.
+- `seller_id`: String — References `users._id`. Always derived from the accepted purchase request; never client-supplied.
+- `status`: String (Enum: `PENDING`, `RESERVED`, `COMPLETED`, `CANCELLED`)
+- `created_at`: Datetime UTC
+- `updated_at`: Datetime UTC
+- `completed_at`: Datetime UTC or `null`
+- `cancelled_at`: Datetime UTC or `null`
+
+**Relationships:**
+- `purchase_request_id` references `purchase_requests._id`.
+- `product_id` references `products._id`.
+- `buyer_id` and `seller_id` both reference `users._id`. Both are derived server-side from the accepted purchase request.
+
+**Ownership & Security Rules:**
+- Only the buyer of the accepted purchase request may create a transaction.
+- Only the seller may advance the transaction to `RESERVED` or `COMPLETED`.
+- Either the buyer or the seller may cancel (`PENDING` or `RESERVED` only).
+- Neither the buyer nor the seller can view or modify another user's transaction.
+- Client cannot supply or override `buyer_id`, `seller_id`, `product_id`, or `status`.
+
+**Status Lifecycle:**
+```
+PENDING  ──► RESERVED   (seller confirms meeting arranged)
+PENDING  ──► CANCELLED  (buyer or seller)
+RESERVED ──► COMPLETED  (seller confirms exchange happened)
+RESERVED ──► CANCELLED  (buyer or seller)
+COMPLETED ── (terminal — no further transitions)
+CANCELLED ── (terminal — no further transitions)
+```
+
+**Product State Integration:**
+- Transaction created (PENDING): Product → `RESERVED` (atomic conditional update — only if currently `ACTIVE`)
+- Transaction → `COMPLETED`: Product → `SOLD`
+- Transaction → `CANCELLED`: Product → `ACTIVE` (conditional — only if still `RESERVED`)
+
+**Data Integrity Note (Phase 7):**
+- MongoDB does not support multi-document ACID transactions in this implementation. The product reservation is handled via a conditional update (`find_one_and_update` with status filter) which provides strong single-document atomicity. The two-step (insert transaction + update product) is defensible for an academic-scale campus marketplace.
+
+**Indexes:**
+- `purchase_request_id` — **Unique index**. One transaction per accepted purchase request.
+- `(buyer_id, status)` — Compound index for buyer history queries.
+- `(seller_id, status)` — Compound index for seller history queries.
+- `(product_id, status)` — Compound index for active-transaction existence checks.
+
+---
+
+### 1.7 `reviews`
+Stores post-transaction reviews written by one participant about the other. Tied exclusively to `COMPLETED` transactions to ensure only real exchanges are reviewed.
+
+- `_id`: ObjectId
+- `transaction_id`: String — References `transactions._id`.
+- `reviewer_id`: String — References `users._id`. Always derived from the authenticated JWT; never client-supplied.
+- `reviewee_id`: String — References `users._id`. Must be the other party of the transaction.
+- `product_id`: String — References `products._id`. Derived server-side from the transaction; never client-supplied.
+- `rating`: Integer (1–5 inclusive)
+- `comment`: String (optional, max 1000 characters)
+- `created_at`: Datetime UTC
+
+**Relationships:**
+- `transaction_id` references `transactions._id`.
+- `reviewer_id` and `reviewee_id` both reference `users._id`.
+- `product_id` references `products._id`.
+
+**Eligibility Rules:**
+- Transaction must exist and be `COMPLETED`.
+- Reviewer must be the buyer or seller of that transaction.
+- Reviewer cannot review themselves (`reviewer_id != reviewee_id`).
+- Reviewee must be the other participant (not a third party).
+- Each direction (buyer→seller, seller→buyer) may produce exactly one review per transaction.
+
+**Rating Validation:**
+- Must be an integer (Python `int`), not a float, string, boolean, or null.
+- Must be in the range 1–5 inclusive.
+
+**Reviews are immutable in Phase 7** — no editing or deletion endpoints are implemented.
+
+**Indexes:**
+- `(transaction_id, reviewer_id, reviewee_id)` — **Unique compound index**. Enforces the one-review-per-reviewer-reviewee-per-transaction rule.
+- `product_id` — For fetching all reviews related to a product listing.
+- `reviewee_id` — For fetching a user's received reviews (trust/seller profile).
+- `reviewer_id` — For fetching all reviews authored by a user.
+

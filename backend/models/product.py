@@ -138,3 +138,25 @@ class ProductModel:
                 'pages': (total + limit - 1) // limit if total > 0 else 1
             }
         }
+
+    @staticmethod
+    def try_reserve(product_id):
+        """
+        Atomically transitions a product from ACTIVE to RESERVED.
+        Returns True if the product was successfully reserved, False if it was
+        not in ACTIVE status (already RESERVED, SOLD, or REMOVED).
+        This conditional update prevents race conditions between concurrent
+        transaction creation attempts.
+        """
+        try:
+            result = ProductModel.collection().update_one(
+                {'_id': ObjectId(product_id), 'status': 'ACTIVE'},
+                {'$set': {
+                    'status': 'RESERVED',
+                    'updated_at': datetime.datetime.now(datetime.timezone.utc)
+                }}
+            )
+            return result.matched_count > 0
+        except Exception:
+            return False
+

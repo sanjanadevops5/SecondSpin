@@ -7,6 +7,8 @@ from .routes.categories import categories_bp
 from .routes.products import products_bp
 from .routes.wishlist import wishlist_bp
 from .routes.purchase_requests import purchase_requests_bp
+from .routes.transactions import transactions_bp
+from .routes.reviews import reviews_bp
 from .errors import register_error_handlers
 
 
@@ -37,6 +39,8 @@ def create_app(config_class=Config):
     app.register_blueprint(products_bp, url_prefix='/api/v1/products')
     app.register_blueprint(wishlist_bp, url_prefix='/api/v1/wishlist')
     app.register_blueprint(purchase_requests_bp, url_prefix='/api/v1/purchase-requests')
+    app.register_blueprint(transactions_bp, url_prefix='/api/v1/transactions')
+    app.register_blueprint(reviews_bp, url_prefix='/api/v1/reviews')
 
     # Register error handlers
     register_error_handlers(app)
