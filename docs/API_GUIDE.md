@@ -74,10 +74,10 @@ We use a lightweight `@validate_json` decorator to assert required fields and ba
 - `/api/v1/products` - Marketplace discovery (search, filter, paginate) and creation
 - `/api/v1/products/me` - Fetch authenticated user's listings
 - `/api/v1/products/<id>` - Retrieve, update, and remove listings
-
-## 13. Future Endpoint Organization (Planned)
 - `/api/v1/wishlist` - User saved items
 - `/api/v1/purchase-requests` - Offers on products
+
+## 13. Future Endpoint Organization (Planned)
 - `/api/v1/transactions` - Completed sales
 - `/api/v1/reviews` - Ratings and feedback
 - `/api/v1/reports` - Content moderation

@@ -22,9 +22,9 @@ College students frequently need to buy course materials and living essentials f
 - [x] Phase 1: Engineering Foundation
 - [x] Phase 2: MongoDB Data Architecture
 - [x] Phase 3: Flask REST API Foundation
-- [ ] Phase 4: Authentication & Security
-- [ ] Phase 5: Vinyl Product & Inventory API
-- [ ] Phase 6: Social & Marketplace Features
+- [x] Phase 4: Authentication & Security
+- [x] Phase 5: Marketplace/Product Module
+- [x] Phase 6: Wishlist & Purchase Requests
 - [ ] Phase 7: Mobile Application Foundation (Flutter)
 - [ ] Phase 8: Web Application Foundation (React/Vue/etc.)
 

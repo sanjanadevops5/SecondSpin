@@ -18,6 +18,17 @@ def app(monkeypatch):
     monkeypatch.setattr("backend.db.get_db", lambda *args, **kwargs: mock_db)
 
     app = create_app(TestConfig)
+    
+    # Setup indexes for mock_db
+    with app.app_context():
+        from backend.models.product import ProductModel
+        from backend.models.wishlist import WishlistModel
+        from backend.models.purchase_request import PurchaseRequestModel
+        
+        ProductModel.setup_indexes()
+        WishlistModel.setup_indexes()
+        PurchaseRequestModel.setup_indexes()
+
     yield app
 
 
