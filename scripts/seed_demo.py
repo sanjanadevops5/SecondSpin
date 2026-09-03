@@ -81,7 +81,7 @@ def seed_demo_data():
     with app.app_context():
         print("==================================================")
         print("  SECONDSPIN — SAFE DEMO DATA SEEDING SYSTEM       ")
-        print("  Currency: INR (₹)                                ")
+        print("  Currency: INR (Rs)                                ")
         print("==================================================")
 
         now = datetime.datetime.now(datetime.timezone.utc)
