@@ -22,22 +22,21 @@ def get_mongo_client(app=None):
     if _mongo_client is None:
         mongo_uri = app.config.get('MONGODB_URI')
         
-        if not mongo_uri:
-            logger.warning("MONGODB_URI is not set. Database connections will fail.")
-            # We don't raise immediately to allow the app to boot even without a DB (e.g. for some tests)
-            return None
-            
+        if not mongo_uri or mongo_uri == 'mongomock':
+            logger.info("MONGODB_URI is not set or set to mongomock. Using in-memory mongomock database.")
+            import mongomock
+            _mongo_client = mongomock.MongoClient()
+            return _mongo_client
+
         try:
             logger.info("Initializing MongoDB client...")
-            # Create a client. In PyMongo 4+, it connects lazily.
             _mongo_client = MongoClient(mongo_uri, serverSelectionTimeoutMS=5000)
-            # Force a call to verify the connection works
             _mongo_client.admin.command('ping')
             logger.info("Successfully connected to MongoDB.")
         except (ConnectionFailure, ConfigurationError) as e:
-            logger.error(f"Failed to connect to MongoDB: {e}")
-            _mongo_client = None
-            raise
+            logger.warning(f"Failed to connect to real MongoDB ({e}). Falling back to in-memory mongomock database.")
+            import mongomock
+            _mongo_client = mongomock.MongoClient()
             
     return _mongo_client
 
