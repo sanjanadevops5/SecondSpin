@@ -34,7 +34,14 @@ def create_app(config_class=Config):
 
     # Initialize extensions
     from .db import init_app
+    from .seed import ensure_seeded
     init_app(app)
+    with app.app_context():
+        if not app.config.get('TESTING'):
+            try:
+                ensure_seeded()
+            except Exception as e:
+                app.logger.warning(f"Auto-seed warning: {e}")
 
     # Register blueprints
     app.register_blueprint(api_v1_bp)

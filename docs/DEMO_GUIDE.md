@@ -1,69 +1,69 @@
-# SecondSpin Local Demo Guide
+# SecondSpin Local Demo & Presentation Guide
 
-This guide provides step-by-step instructions to run and demo the full **SecondSpin** campus marketplace stack locally.
-
----
-
-## Prerequisites
-
-1. **Python 3.10+**: Virtual environment located at `venv/`.
-2. **Node.js 18+ & npm**: For running the React web application in `web/`.
-3. **Flutter 3.x+ (Optional for Mobile)**: For running the Flutter mobile application in `mobile/`.
+This guide provides step-by-step instructions to seed demo data, start the application, and present a complete live demonstration of **SecondSpin** (campus-exclusive marketplace).
 
 ---
 
-## 1. Start Flask REST API Backend
+## 1. Seed Safe Demo Data
 
-Open **Terminal 1** and run:
+Run the safe, repeatable demo data seeding command:
 
+```powershell
+cd c:\Users\Sanju\Desktop\SecondSpin
+venv\Scripts\python.exe scripts/seed_demo.py
+```
+
+This populates:
+- **10 Categories**: Textbooks, Scientific Calculators, Electronics, Laptops & Computers, Bicycles, Lab Equipment, Hostel Essentials, Stationery, Sports Equipment, Accessories & Other.
+- **5 Verified Demo Accounts**: 1 Admin, 2 Student Sellers, 2 Student Buyers.
+- **26 Realistic Student Marketplace Listings**: 19 ACTIVE, 3 RESERVED, 2 SOLD, 1 REMOVED.
+- **Wishlists, Purchase Requests, Transactions, Reviews, and Moderation Reports**.
+
+---
+
+## 2. Pre-Configured Demo Credentials
+
+**Standard Password for All Demo Accounts**: `Password123!`
+
+| Role | Name | Email | Department |
+|---|---|---|---|
+| **Admin** | SecondSpin Admin | `admin@demo.secondspin.local` | Campus Operations |
+| **Seller 1** | Aarav Mehta | `seller1@demo.secondspin.local` | Computer Science |
+| **Seller 2** | Riya Sharma | `seller2@demo.secondspin.local` | Electrical Engineering |
+| **Buyer 1** | Kabir Singh | `buyer1@demo.secondspin.local` | Mechanical Engineering |
+| **Buyer 2** | Ananya Patel | `buyer2@demo.secondspin.local` | Business Administration |
+
+---
+
+## 3. Launch Application Stack
+
+### Terminal 1 — Backend API
 ```powershell
 cd c:\Users\Sanju\Desktop\SecondSpin
 venv\Scripts\python.exe -m backend.app
 ```
+- **Base URL**: `http://127.0.0.1:5000/api/v1`
+- **Health Check**: `http://127.0.0.1:5000/api/v1/health`
+- **Categories Endpoint**: `http://127.0.0.1:5000/api/v1/categories/`
 
-- **Backend Base URL**: `http://127.0.0.1:5000/api/v1`
-- **Health Check URL**: `http://127.0.0.1:5000/api/v1/health`
-
-*(Note: The backend automatically falls back to an in-memory MongoDB mock if `MONGODB_URI` environment variable is omitted or unavailable, allowing out-of-the-box local demoing).*
-
----
-
-## 2. Start React Web Application
-
-Open **Terminal 2** and run:
-
+### Terminal 2 — Web Application
 ```powershell
 cd c:\Users\Sanju\Desktop\SecondSpin\web
 npm run dev
 ```
-
 - **Web App URL**: `http://localhost:3000`
-- **Proxy**: `/api/v1` requests are automatically proxied by Vite to `http://127.0.0.1:5000`.
 
 ---
 
-## 3. Start Flutter Mobile Application (Optional)
+## 4. Live Presentation Sequence
 
-Open **Terminal 3** and run:
-
-```powershell
-cd c:\Users\Sanju\Desktop\SecondSpin\mobile
-flutter run
-```
-
-- **Android Emulator Networking**: The Flutter app automatically targets `http://10.0.2.2:5000/api/v1` when running on an Android emulator.
-- **iOS Simulator / Desktop**: Targets `http://127.0.0.1:5000/api/v1`.
-
----
-
-## 4. Complete Demo Workflow
-
-1. **Open Browser**: Navigate to `http://localhost:3000`.
-2. **Student Registration**: Click **Register** and create a student account (e.g. `alex@univ.edu`, password `password123`).
-3. **Browse Marketplace**: Search for items, apply category filters (`Textbooks`, `Electronics`, `Calculators`), and condition filters (`Good`, `Like New`).
-4. **View Product Details**: Click any product card to inspect historical price insights, seller department info, and related campus items.
-5. **Post a New Listing**: Click **Sell Item** and post a listing with title, category, price, condition, and image URL.
-6. **Submit Purchase Request**: Log into a second student account, open a listing, and submit a "Request to Buy".
-7. **Complete Transaction**: Log back in as seller, open **Requests**, click **Accept**, initiate transaction, click **Reserve Item**, and click **Complete Sale**.
-8. **Leave Review**: Log back in as buyer, open **Orders**, and submit a 5-star seller review.
-9. **Admin Dashboard**: Log in with an admin account and open `/admin` to view platform analytics metrics, user moderation (suspend/unsuspend), and listing moderation.
+1. **Open Application**: Navigate to `http://localhost:3000`.
+2. **Explore Marketplace**: Browse pre-seeded listings, search for *"calculator"*, filter by category (*Textbooks*, *Electronics*, *Bicycles*), and sort by price (*Low to High*).
+3. **Inspect Product Detail**: Click on *"TI-84 Plus CE Graphing Calculator"* or *"Lenovo ThinkPad E14 Laptop"* to demonstrate historical price insights and related campus products.
+4. **Log In as Seller**: Click **Login** and sign in as `seller1@demo.secondspin.local` / `Password123!`.
+5. **Demonstrate "Sell Item"**: Click **Sell Item**. Show the **Category dropdown** loading real backend categories (*Textbooks*, *Scientific Calculators*, *Electronics*, *Laptops & Computers*, etc.). Fill in title, category, condition, price, description, image URL, and submit.
+6. **Verify New Listing**: Return to **Marketplace** to show the newly published listing.
+7. **Switch to Buyer & Request to Buy**: Log in as `buyer1@demo.secondspin.local` / `Password123!`, save items to wishlist, and click **Request to Buy**.
+8. **Seller Request Acceptance & Transaction**: Switch to `seller1@demo.secondspin.local`, view incoming requests, click **Accept**, reserve the item, and complete the sale.
+9. **Post Seller Review**: Switch back to `buyer1@demo.secondspin.local`, go to **Orders**, and leave a 5-star rating.
+10. **Admin Moderation & Analytics**: Log in as `admin@demo.secondspin.local`, open `/admin` to demonstrate live metrics overview, user status moderation, and report resolution.

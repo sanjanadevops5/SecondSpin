@@ -35,12 +35,28 @@ export const Marketplace: React.FC = () => {
 
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
 
+  const DEFAULT_CATEGORIES: Category[] = [
+    { _id: 'cat_1', name: 'Textbooks', slug: 'textbooks', is_active: true },
+    { _id: 'cat_2', name: 'Scientific Calculators', slug: 'scientific-calculators', is_active: true },
+    { _id: 'cat_3', name: 'Electronics', slug: 'electronics', is_active: true },
+    { _id: 'cat_4', name: 'Laptops & Computers', slug: 'laptops', is_active: true },
+    { _id: 'cat_5', name: 'Bicycles', slug: 'bicycles', is_active: true },
+    { _id: 'cat_6', name: 'Lab Equipment', slug: 'lab-equipment', is_active: true },
+    { _id: 'cat_7', name: 'Hostel Essentials', slug: 'hostel-essentials', is_active: true },
+    { _id: 'cat_8', name: 'Stationery', slug: 'stationery', is_active: true },
+    { _id: 'cat_9', name: 'Sports Equipment', slug: 'sports-equipment', is_active: true },
+    { _id: 'cat_10', name: 'Accessories & Other', slug: 'other', is_active: true },
+  ];
+
   // Fetch categories on mount
   useEffect(() => {
     categoryService
       .getCategories()
-      .then(setCategories)
-      .catch((err) => console.warn('Failed to load categories:', err));
+      .then((res: any) => {
+        const fetched = Array.isArray(res) ? res : res?.items || [];
+        setCategories(fetched.length > 0 ? fetched : DEFAULT_CATEGORIES);
+      })
+      .catch(() => setCategories(DEFAULT_CATEGORIES));
   }, []);
 
   // Fetch products whenever filters change

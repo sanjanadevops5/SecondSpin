@@ -22,13 +22,13 @@ INITIAL_CATEGORIES = [
     {"name": "Textbooks", "slug": "textbooks"},
     {"name": "Scientific Calculators", "slug": "scientific-calculators"},
     {"name": "Electronics", "slug": "electronics"},
-    {"name": "Laptops", "slug": "laptops"},
+    {"name": "Laptops & Computers", "slug": "laptops"},
     {"name": "Bicycles", "slug": "bicycles"},
     {"name": "Lab Equipment", "slug": "lab-equipment"},
     {"name": "Hostel Essentials", "slug": "hostel-essentials"},
     {"name": "Stationery", "slug": "stationery"},
     {"name": "Sports Equipment", "slug": "sports-equipment"},
-    {"name": "Other", "slug": "other"},
+    {"name": "Accessories & Other", "slug": "other"},
 ]
 
 DEMO_USERS = [
@@ -79,7 +79,7 @@ def seed_demo_data():
     app = create_app()
     with app.app_context():
         print("==================================================")
-        print("  SECONDSPIN — SAFE DEMO DATA SEEDING SYSTEM      ")
+        print("  SECONDSPIN -- SAFE DEMO DATA SEEDING SYSTEM     ")
         print("==================================================")
 
         now = datetime.datetime.now(datetime.timezone.utc)
@@ -143,10 +143,11 @@ def seed_demo_data():
         prod_coll = ProductModel.collection()
 
         demo_products = [
+            # TEXTBOOKS (6 items)
             {
                 "title": "Engineering Mathematics (8th Edition)",
-                "description": "Essential textbook for CS/EE/ME math modules. Excellent condition, no highlighting.",
-                "price": 35.00,
+                "description": "Essential textbook for CS/EE/ME math modules. Excellent condition with zero markings.",
+                "price": 32.00,
                 "category_id": cat_map["textbooks"],
                 "condition": "GOOD",
                 "images": ["https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80"],
@@ -154,19 +155,9 @@ def seed_demo_data():
                 "seller_id": seller1_id,
             },
             {
-                "title": "TI-84 Plus CE Graphing Calculator",
-                "description": "Full color display graphing calculator. Comes with USB charging cable.",
-                "price": 55.00,
-                "category_id": cat_map["scientific-calculators"],
-                "condition": "LIKE_NEW",
-                "images": ["https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=600&q=80"],
-                "status": "ACTIVE",
-                "seller_id": seller1_id,
-            },
-            {
-                "title": "Data Structures & Algorithms in Java",
-                "description": "Classic textbook by Goodrich & Tamassia. Perfect for CS201 course.",
-                "price": 40.00,
+                "title": "Data Structures and Algorithms in Java",
+                "description": "Standard CS textbook by Goodrich & Tamassia. Covers trees, graphs, and dynamic programming.",
+                "price": 28.00,
                 "category_id": cat_map["textbooks"],
                 "condition": "GOOD",
                 "images": ["https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=600&q=80"],
@@ -174,29 +165,135 @@ def seed_demo_data():
                 "seller_id": seller1_id,
             },
             {
-                "title": "Arduino Uno Complete Starter Kit",
-                "description": "Includes breadboard, jumper wires, sensors, LEDs, and tutorial manual.",
-                "price": 25.00,
-                "category_id": cat_map["electronics"],
+                "title": "Operating System Concepts (Silberschatz)",
+                "description": "The dinosaur operating systems book! Great condition, required for CS302.",
+                "price": 35.00,
+                "category_id": cat_map["textbooks"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+            {
+                "title": "Database Management Systems (Ramakrishnan)",
+                "description": "Comprehensive DBMS textbook covering SQL, relational algebra, and indexing.",
+                "price": 24.00,
+                "category_id": cat_map["textbooks"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+            {
+                "title": "Computer Networks (Tanenbaum 5th Ed)",
+                "description": "Covers TCP/IP, routing algorithms, wireless networks, and network security.",
+                "price": 30.00,
+                "category_id": cat_map["textbooks"],
                 "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller1_id,
+            },
+            {
+                "title": "Programming in Python (2nd Edition)",
+                "description": "Introduction to Python programming, data structures, and computer science concepts.",
+                "price": 20.00,
+                "category_id": cat_map["textbooks"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+
+            # SCIENTIFIC CALCULATORS (2 items)
+            {
+                "title": "TI-84 Plus CE Graphing Calculator",
+                "description": "High-resolution color backlit display. Perfect for calculus and statistics. Includes USB cable.",
+                "price": 48.00,
+                "category_id": cat_map["scientific-calculators"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller1_id,
+            },
+            {
+                "title": "Casio FX-991EX ClassWiz Calculator",
+                "description": "552 functions, high resolution LCD display, QR code equation display.",
+                "price": 18.00,
+                "category_id": cat_map["scientific-calculators"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1611125832047-1d7ad1e8e49d?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+
+            # ELECTRONICS & HARDWARE (5 items)
+            {
+                "title": "Arduino Ultimate Hardware Starter Kit",
+                "description": "Complete electronic components box: Uno board, breadboard, resistors, LEDs, motors, and sensors.",
+                "price": 26.00,
+                "category_id": cat_map["electronics"],
+                "condition": "NEW",
                 "images": ["https://images.unsplash.com/photo-1553406830-ef2513450d76?auto=format&fit=crop&w=600&q=80"],
                 "status": "ACTIVE",
-                "seller_id": seller2_id,
+                "seller_id": seller1_id,
             },
             {
-                "title": "Logitech MX Master 3 Wireless Mouse",
-                "description": "Ergonomic Bluetooth mouse with hyper-fast scroll wheel. Battery lasts 2 months.",
-                "price": 45.00,
+                "title": "Electronics Lab Breadboard & Component Set",
+                "description": "Includes jumper wires, capacitors, transistors, IC chips, and logic gate ICs.",
+                "price": 22.00,
                 "category_id": cat_map["electronics"],
-                "condition": "GOOD",
-                "images": ["https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=600&q=80"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80"],
                 "status": "ACTIVE",
                 "seller_id": seller2_id,
             },
             {
-                "title": "Dell UltraSharp 24-inch FHD Monitor",
-                "description": "IPS panel with HDMI & DisplayPort inputs. Ideal for dual screen laptop setup.",
-                "price": 85.00,
+                "title": "Anker 7-in-1 USB-C Hub Adapter",
+                "description": "HDMI 4K, 100W Power Delivery, SD Card reader, 2x USB 3.0 ports.",
+                "price": 20.00,
+                "category_id": cat_map["electronics"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1616440342230-016f1082531d?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller1_id,
+            },
+            {
+                "title": "Logitech K380 Multi-Device Wireless Keyboard",
+                "description": "Compact Bluetooth keyboard for tablet or laptop setup.",
+                "price": 22.00,
+                "category_id": cat_map["electronics"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+            {
+                "title": "SanDisk 1TB External USB 3.0 Portable SSD",
+                "description": "High-speed portable SSD drive for data backups and OS ISO images.",
+                "price": 65.00,
+                "category_id": cat_map["electronics"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller1_id,
+            },
+
+            # LAPTOPS & COMPUTERS (3 items)
+            {
+                "title": "Lenovo ThinkPad E14 Laptop (16GB RAM, 512GB SSD)",
+                "description": "Fast i5 processor, crisp 1080p display, long battery life. Excellent for coding and assignments.",
+                "price": 380.00,
+                "category_id": cat_map["laptops"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller1_id,
+            },
+            {
+                "title": "Dell 24-inch UltraSharp Full HD Monitor",
+                "description": "IPS panel with ultra-thin bezel, height adjustable stand, HDMI & DisplayPort.",
+                "price": 95.00,
                 "category_id": cat_map["laptops"],
                 "condition": "GOOD",
                 "images": ["https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80"],
@@ -204,54 +301,60 @@ def seed_demo_data():
                 "seller_id": seller2_id,
             },
             {
-                "title": "Trek Campus Hybrid Bicycle",
-                "description": "21-speed lightweight aluminum frame bike with front basket and u-lock.",
-                "price": 110.00,
+                "title": "Apple iPad Air (64GB WiFi, Space Gray)",
+                "description": "Includes Apple Pencil 2nd gen and smart folio magnetic case. Currently reserved for campus buyer.",
+                "price": 310.00,
+                "category_id": cat_map["laptops"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80"],
+                "status": "RESERVED",
+                "seller_id": seller1_id,
+            },
+
+            # BICYCLES (1 item)
+            {
+                "title": "Trek Campus Hybrid Commuter Bicycle",
+                "description": "Lightweight alloy frame, 21 speeds, front basket, and heavy-duty U-lock included.",
+                "price": 120.00,
                 "category_id": cat_map["bicycles"],
                 "condition": "GOOD",
                 "images": ["https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80"],
                 "status": "ACTIVE",
-                "seller_id": seller1_id,
+                "seller_id": seller2_id,
             },
+
+            # LAB EQUIPMENT (2 items)
             {
-                "title": "Chemistry Lab Coat & Safety Goggles Set",
-                "description": "White 100% cotton lab coat (Size M) and anti-fog safety goggles.",
-                "price": 18.00,
+                "title": "Chemistry Lab Coat & Anti-Fog Goggles Set",
+                "description": "Unisex 100% white cotton lab coat (Size Medium) with clear safety goggles.",
+                "price": 16.00,
                 "category_id": cat_map["lab-equipment"],
                 "condition": "LIKE_NEW",
                 "images": ["https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"],
                 "status": "ACTIVE",
-                "seller_id": seller2_id,
+                "seller_id": seller1_id,
             },
             {
-                "title": "Hostel Room Study Lamp with USB Port",
-                "description": "Dimmable LED desk lamp with touch controls and phone charging port.",
-                "price": 15.00,
+                "title": "Physics Laboratory Equipment & Optical Prism Kit",
+                "description": "Complete optics kit with glass prisms, lenses, and laser pointer.",
+                "price": 25.00,
+                "category_id": cat_map["lab-equipment"],
+                "condition": "LIKE_NEW",
+                "images": ["https://images.unsplash.com/photo-1507668077129-56e32842fceb?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+
+            # HOSTEL ESSENTIALS & STATIONERY (3 items)
+            {
+                "title": "Adjustable LED Hostel Study Desk Lamp",
+                "description": "Touch switch LED lamp with 3 brightness modes and built-in USB charging port.",
+                "price": 14.00,
                 "category_id": cat_map["hostel-essentials"],
                 "condition": "LIKE_NEW",
                 "images": ["https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80"],
                 "status": "ACTIVE",
-                "seller_id": seller1_id,
-            },
-            {
-                "title": "Wilson Pro Tennis Racket & Ball Set",
-                "description": "Lightweight carbon fiber tennis racket with 3 fresh Wilson championship balls.",
-                "price": 30.00,
-                "category_id": cat_map["sports-equipment"],
-                "condition": "GOOD",
-                "images": ["https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=600&q=80"],
-                "status": "ACTIVE",
                 "seller_id": seller2_id,
-            },
-            {
-                "title": "Casio FX-991EX ClassWiz Calculator",
-                "description": "High resolution display scientific calculator with spreadsheet functions.",
-                "price": 22.00,
-                "category_id": cat_map["scientific-calculators"],
-                "condition": "LIKE_NEW",
-                "images": ["https://images.unsplash.com/photo-1611125832047-1d7ad1e8e49d?auto=format&fit=crop&w=600&q=80"],
-                "status": "ACTIVE",
-                "seller_id": seller1_id,
             },
             {
                 "title": "North Face Campus Backpack 30L",
@@ -260,32 +363,58 @@ def seed_demo_data():
                 "category_id": cat_map["hostel-essentials"],
                 "condition": "GOOD",
                 "images": ["https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80"],
-                "status": "ACTIVE",
-                "seller_id": seller2_id,
-            },
-            {
-                "title": "Apple iPad Air (64GB WiFi, Space Gray)",
-                "description": "Includes Apple Pencil 2nd gen. Screen protector installed since day 1.",
-                "price": 320.00,
-                "category_id": cat_map["laptops"],
-                "condition": "LIKE_NEW",
-                "images": ["https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80"],
                 "status": "RESERVED",
                 "seller_id": seller1_id,
             },
             {
-                "title": "Digital Multimeter & Circuit Tester Kit",
-                "description": "Precision digital multimeter for EE hardware assignments.",
-                "price": 20.00,
+                "title": "Hostel Room Desk Fan (Quiet 3-Speed)",
+                "description": "Compact desk fan for warm study sessions.",
+                "price": 12.00,
+                "category_id": cat_map["hostel-essentials"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1618941723380-496e5797f743?auto=format&fit=crop&w=600&q=80"],
+                "status": "RESERVED",
+                "seller_id": seller2_id,
+            },
+
+            # SPORTS EQUIPMENT (2 items)
+            {
+                "title": "Wilson Pro Tennis Racket with Ball Canister",
+                "description": "Standard adult size composite tennis racket. Includes 3 unopened Wilson Extra Duty balls.",
+                "price": 32.00,
+                "category_id": cat_map["sports-equipment"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller1_id,
+            },
+            {
+                "title": "Adidas Size 5 Campus Football",
+                "description": "Durable stitched football, holds air pressure perfectly.",
+                "price": 15.00,
+                "category_id": cat_map["sports-equipment"],
+                "condition": "GOOD",
+                "images": ["https://images.unsplash.com/photo-1614632537197-38a17061c2bd?auto=format&fit=crop&w=600&q=80"],
+                "status": "ACTIVE",
+                "seller_id": seller2_id,
+            },
+
+            # SOLD Products (1 item)
+            {
+                "title": "Digital Multimeter & Electrical Measurement Tool",
+                "description": "Auto-ranging digital multimeter. Sold to engineering student.",
+                "price": 19.00,
                 "category_id": cat_map["electronics"],
                 "condition": "GOOD",
                 "images": ["https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80"],
                 "status": "SOLD",
                 "seller_id": seller2_id,
             },
+
+            # REMOVED Products (1 item for moderation demo)
             {
-                "title": "Inappropriate / Spam Test Listing",
-                "description": "Demo product created for testing admin listing moderation & report resolution.",
+                "title": "Inappropriate Spam Listing Demo Item",
+                "description": "Spam listing created to test admin listing moderation and report resolution.",
                 "price": 999.00,
                 "category_id": cat_map["other"],
                 "condition": "POOR",
@@ -321,8 +450,8 @@ def seed_demo_data():
         print("\n[4/7] Seeding Saved Wishlists...")
         wish_coll = WishlistModel.collection()
         calc_id = prod_map.get("TI-84 Plus CE Graphing Calculator")
-        laptop_id = prod_map.get("Apple iPad Air (64GB WiFi, Space Gray)")
-        bike_id = prod_map.get("Trek Campus Hybrid Bicycle")
+        laptop_id = prod_map.get("Lenovo ThinkPad E14 Laptop (16GB RAM, 512GB SSD)")
+        bike_id = prod_map.get("Trek Campus Hybrid Commuter Bicycle")
 
         if calc_id and not wish_coll.find_one({"user_id": buyer1_id, "product_id": calc_id}):
             wish_coll.insert_one({"user_id": buyer1_id, "product_id": calc_id, "created_at": now})
@@ -338,8 +467,7 @@ def seed_demo_data():
         req_coll = PurchaseRequestModel.collection()
         tx_coll = TransactionModel.collection()
 
-        # Completed Transaction for Multimeter
-        mm_id = prod_map.get("Digital Multimeter & Circuit Tester Kit")
+        mm_id = prod_map.get("Digital Multimeter & Electrical Measurement Tool")
         if mm_id:
             req_doc = req_coll.find_one({"product_id": mm_id, "buyer_id": buyer1_id})
             if not req_doc:
@@ -391,7 +519,7 @@ def seed_demo_data():
         # 7. Seed Admin Reports
         print("\n[7/7] Seeding Admin Moderation Reports...")
         rep_coll = ReportModel.collection()
-        spam_id = prod_map.get("Inappropriate / Spam Test Listing")
+        spam_id = prod_map.get("Inappropriate Spam Listing Demo Item")
         if spam_id and not rep_coll.find_one({"target_id": spam_id}):
             rep_coll.insert_one({
                 "reporter_id": buyer1_id,
@@ -407,7 +535,7 @@ def seed_demo_data():
         print("[OK] Admin reports seeded.")
 
         print("\n==================================================")
-        print("  DEMO SEED COMPLETE — ALL DATA READY FOR DEMO!   ")
+        print("  DEMO SEED COMPLETE -- ALL DATA READY FOR DEMO!   ")
         print("==================================================")
 
 
