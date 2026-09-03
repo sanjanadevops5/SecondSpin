@@ -39,13 +39,13 @@ export const Marketplace: React.FC = () => {
     { _id: 'cat_1', name: 'Textbooks', slug: 'textbooks', is_active: true },
     { _id: 'cat_2', name: 'Scientific Calculators', slug: 'scientific-calculators', is_active: true },
     { _id: 'cat_3', name: 'Electronics', slug: 'electronics', is_active: true },
-    { _id: 'cat_4', name: 'Laptops & Computers', slug: 'laptops', is_active: true },
+    { _id: 'cat_4', name: 'Laptops & Computers', slug: 'laptops-computers', is_active: true },
     { _id: 'cat_5', name: 'Bicycles', slug: 'bicycles', is_active: true },
     { _id: 'cat_6', name: 'Lab Equipment', slug: 'lab-equipment', is_active: true },
     { _id: 'cat_7', name: 'Hostel Essentials', slug: 'hostel-essentials', is_active: true },
     { _id: 'cat_8', name: 'Stationery', slug: 'stationery', is_active: true },
     { _id: 'cat_9', name: 'Sports Equipment', slug: 'sports-equipment', is_active: true },
-    { _id: 'cat_10', name: 'Accessories & Other', slug: 'other', is_active: true },
+    { _id: 'cat_10', name: 'Accessories & Other', slug: 'accessories', is_active: true },
   ];
 
   // Fetch categories on mount
@@ -276,7 +276,7 @@ export const Marketplace: React.FC = () => {
           {/* Price Filter */}
           <div className="space-y-2">
             <label className="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Price Range ($)
+              Price Range (₹)
             </label>
             <div className="flex items-center gap-2">
               <input

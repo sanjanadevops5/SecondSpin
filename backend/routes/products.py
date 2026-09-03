@@ -22,9 +22,8 @@ def _format_product(product, include_seller=True):
         else:
             product['seller'] = {'id': product['seller_id'], 'name': 'Unknown User'}
     
-    # Do not expose internal raw seller_id at root if nested seller exists
-    if 'seller' in product:
-        product.pop('seller_id', None)
+    # Keep seller_id at root for ownership comparison on frontend
+    # (do NOT strip it)
         
     return product
 

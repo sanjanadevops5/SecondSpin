@@ -177,7 +177,7 @@ export const Transactions: React.FC = () => {
                   </Link>
                   {tx.product?.price && (
                     <span className="text-sm font-extrabold text-emerald-700">
-                      ${tx.product.price.toFixed(2)}
+                      ₹{tx.product.price.toLocaleString('en-IN')}
                     </span>
                   )}
                 </div>

@@ -20,8 +20,8 @@ def test_get_me(client, auth_token):
     assert res.status_code == 200
     data = json.loads(res.data)
     assert data['success'] is True
-    assert data['data']['name'] == "User Profile Test"
-    assert data['data']['email'] == "profile@college.edu"
+    assert data['data']['user']['name'] == "User Profile Test"
+    assert data['data']['user']['email'] == "profile@college.edu"
 
 def test_update_me(client, auth_token):
     res = client.put('/api/v1/users/me', 
@@ -32,7 +32,7 @@ def test_update_me(client, auth_token):
     
     res2 = client.get('/api/v1/users/me', headers={"Authorization": f"Bearer {auth_token}"})
     data = json.loads(res2.data)
-    assert data['data']['department'] == "Computer Science"
+    assert data['data']['user']['department'] == "Computer Science"
 
 def test_update_me_restricted_field(client, auth_token):
     res = client.put('/api/v1/users/me', 

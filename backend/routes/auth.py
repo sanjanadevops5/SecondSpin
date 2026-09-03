@@ -72,11 +72,13 @@ def login():
     
     # Return token but NEVER password_hash
     user_data = {
-        'id': str(user['_id']),
+        '_id': str(user['_id']),
         'name': user.get('name'),
         'email': user.get('email'),
         'role': user.get('role'),
-        'verification_status': user.get('verification_status')
+        'department': user.get('department'),
+        'verification_status': user.get('verification_status'),
+        'account_status': user.get('account_status'),
     }
     
     return success_response(data={

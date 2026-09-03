@@ -239,7 +239,7 @@ export const ProductDetail: React.FC = () => {
             </h1>
 
             <div className="mt-4 flex items-baseline gap-3">
-              <span className="text-3xl font-black text-slate-900">${product.price.toFixed(2)}</span>
+              <span className="text-3xl font-black text-slate-900">₹{product.price.toLocaleString('en-IN')}</span>
               <span className="text-xs font-semibold text-slate-400">Campus Pickup</span>
             </div>
           </div>
@@ -291,7 +291,7 @@ export const ProductDetail: React.FC = () => {
                 }}
                 className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-base rounded-2xl shadow-lg shadow-emerald-600/20 hover:shadow-xl transition-all flex items-center justify-center gap-2"
               >
-                <MessageSquare size={20} /> Request to Buy ($ {product.price.toFixed(2)})
+                <MessageSquare size={20} /> Request to Buy (₹{product.price.toLocaleString('en-IN')})
               </button>
             ) : (
               <button
@@ -336,18 +336,18 @@ export const ProductDetail: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                 <span className="text-xs text-slate-400 block font-medium">Listed Price</span>
-                <span className="text-2xl font-black text-white">${priceInsights.current_price.toFixed(2)}</span>
+                <span className="text-2xl font-black text-white">₹{priceInsights.current_price.toLocaleString('en-IN')}</span>
               </div>
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                 <span className="text-xs text-slate-400 block font-medium">Category Average</span>
                 <span className="text-2xl font-black text-emerald-400">
-                  ${priceInsights.historical_average?.toFixed(2)}
+                  ₹{priceInsights.historical_average?.toLocaleString('en-IN')}
                 </span>
               </div>
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                 <span className="text-xs text-slate-400 block font-medium">Lowest Listing</span>
                 <span className="text-2xl font-black text-slate-200">
-                  ${priceInsights.min_price?.toFixed(2)}
+                  ₹{priceInsights.min_price?.toLocaleString('en-IN')}
                 </span>
               </div>
               <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
@@ -380,7 +380,7 @@ export const ProductDetail: React.FC = () => {
         <form onSubmit={handleSendRequest} className="space-y-4">
           <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
             <span className="font-bold text-slate-800 block">{product.title}</span>
-            <span className="text-emerald-700 font-extrabold block">${product.price.toFixed(2)}</span>
+            <span className="text-emerald-700 font-extrabold block">₹{product.price.toLocaleString('en-IN')}</span>
             <span className="text-slate-500 block">Seller: {product.seller?.name}</span>
           </div>
 

@@ -14,7 +14,7 @@ def get_me():
         return error_response(code="NOT_FOUND", message="User not found.", status_code=404)
         
     user_data = {
-        'id': str(user['_id']),
+        '_id': str(user['_id']),
         'name': user.get('name'),
         'email': user.get('email'),
         'role': user.get('role'),
@@ -24,7 +24,7 @@ def get_me():
         'profile': user.get('profile', {})
     }
     
-    return success_response(data=user_data)
+    return success_response(data={'user': user_data})
 
 @users_bp.route('/me', methods=['PUT'])
 @jwt_required

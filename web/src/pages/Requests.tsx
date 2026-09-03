@@ -151,7 +151,7 @@ export const Requests: React.FC = () => {
                   </Link>
                   {req.product?.price && (
                     <span className="text-sm font-extrabold text-emerald-700">
-                      ${req.product.price.toFixed(2)}
+                      ₹{req.product.price.toLocaleString('en-IN')}
                     </span>
                   )}
                 </div>

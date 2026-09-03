@@ -135,7 +135,7 @@ export const Profile: React.FC = () => {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center justify-between">
                     <Badge status={prod.status} size="sm" />
-                    <span className="text-sm font-extrabold text-slate-900">${prod.price.toFixed(2)}</span>
+                    <span className="text-sm font-extrabold text-slate-900">₹{prod.price.toLocaleString('en-IN')}</span>
                   </div>
                   <h3 className="text-base font-bold text-slate-900">{prod.title}</h3>
                   <p className="text-xs text-slate-500 line-clamp-2">{prod.description}</p>

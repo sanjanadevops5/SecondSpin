@@ -308,7 +308,7 @@ export const AdminDashboard: React.FC = () => {
               {products.map((p) => (
                 <tr key={p._id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 font-bold">{p.title}</td>
-                  <td className="px-6 py-4 font-extrabold text-emerald-700">${p.price.toFixed(2)}</td>
+                  <td className="px-6 py-4 font-extrabold text-emerald-700">₹{p.price.toLocaleString('en-IN')}</td>
                   <td className="px-6 py-4">{p.category_id}</td>
                   <td className="px-6 py-4"><Badge status={p.status} size="sm" /></td>
                   <td className="px-6 py-4">

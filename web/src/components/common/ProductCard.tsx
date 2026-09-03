@@ -67,7 +67,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div className="flex items-center justify-between gap-2 text-xs font-medium text-emerald-600 mb-2">
           <span className="inline-flex items-center gap-1 uppercase tracking-wider font-bold">
             <Tag size={12} />
-            {product.category_id}
+            {product.category_id.replace(/-/g, ' ')}
           </span>
           {product.seller?.department && (
             <span className="text-slate-400 inline-flex items-center gap-1 truncate max-w-[120px]">
@@ -101,7 +101,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div>
             <span className="text-xs text-slate-400 block font-medium">Price</span>
             <span className="text-lg font-extrabold text-slate-900">
-              ${product.price.toFixed(2)}
+              ₹{product.price.toLocaleString('en-IN')}
             </span>
           </div>
 
