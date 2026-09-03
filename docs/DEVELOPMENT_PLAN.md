@@ -7,7 +7,7 @@ To break down the software development lifecycle into logical, manageable phases
 Following this plan guarantees that progress can be tracked efficiently, testability is maintained at each step, and we avoid the trap of building frontends without a working backend.
 
 ## Current Status
-Phase 8 complete. Entering Phase 9.
+Phase 9 complete. Entering Phase 10.
 
 ---
 
@@ -77,9 +77,9 @@ Phase 8 complete. Entering Phase 9.
 ### Phase 9: Smart Features
 - **Objective:** Implement advanced logic and recommendations.
 - **Tasks:** Logic for related products (matching categories/tags), calculating historical average prices, popular/trending categories.
-- **Deliverables:** Smart endpoints (`/api/v1/analytics`).
+- **Deliverables:** Smart endpoints (`/api/v1/products/<id>/related`, `/api/v1/products/popular`, `/api/v1/categories/popular`, `/api/v1/products/<id>/price-insights`, `/api/v1/recommendations`).
 - **Dependencies:** Phase 5, Phase 8.
-- **Definition of Done:** API returns valid recommendations and price insights.
+- **Definition of Done:** API returns valid recommendations and price insights. *(Complete)*
 
 ### Phase 10: Web Frontend
 - **Objective:** Build the browser experience.

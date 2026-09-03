@@ -745,6 +745,80 @@ Aggregated marketplace overview metrics computed dynamically via MongoDB queries
 
 ---
 
-## 17. Future Endpoint Organization (Planned Phase 9+)
-- `/api/v1/analytics/insights` - AI/ML price predictions and recommendations (Phase 9)
+## 17. Smart Marketplace Features — Phase 9
+
+#### `GET /api/v1/products/<product_id>/related`
+Returns related products using a explainable rule-based scoring algorithm (category match +40, title keyword overlap +15/word, price similarity +20, condition match +10). Excludes target and `REMOVED` products.
+
+**Query Params:** `limit` (default 10, max 50)
+
+**Success (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "product": { ...product fields... },
+        "score": 75.0,
+        "reason": "Same category and similar price range"
+      }
+    ],
+    "count": 1
+  }
+}
+```
+
+---
+
+#### `GET /api/v1/products/popular`
+Returns marketplace-wide popular products ranked by demand signals (`wishlists * 2.0 + requests * 3.0 + completed_sales * 5.0`). Excludes `REMOVED` products.
+
+**Query Params:** `limit` (default 10, max 50)
+
+---
+
+#### `GET /api/v1/categories/popular`
+Returns popular categories ranked by market demand (`active_listings * 1.0 + wishlists * 2.0 + requests * 3.0 + completed_sales * 5.0`).
+
+**Query Params:** `limit` (default 10, max 50)
+
+---
+
+#### `GET /api/v1/products/<product_id>/price-insights`
+Returns historical market price statistics (`current_price`, `historical_average`, `min_price`, `max_price`, `comparable_count`, `insufficient_data` flag, `price_comparison`). Excludes `REMOVED` listings.
+
+**Success (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "product_id": "<string>",
+    "current_price": 50.0,
+    "historical_average": 52.5,
+    "min_price": 40.0,
+    "max_price": 60.0,
+    "comparable_count": 3,
+    "insufficient_data": false,
+    "price_comparison": "Priced fairly at historical market rate"
+  }
+}
+```
+
+---
+
+#### `GET /api/v1/recommendations`
+Returns personalized recommendations for the authenticated user based on their wishlist, request, and transaction category activity. Features a smooth cold-start fallback to campus-wide popular items for new users without history. Excludes items listed by the caller.
+
+**Auth:** Required (`Authorization: Bearer <token>`)
+
+**Query Params:** `limit` (default 10, max 50)
+
+---
+
+## 18. Future Features & Architecture (Planned Phase 10+)
+- Web Application Frontend (Phase 10)
+- Flutter Mobile Application (Phase 11)
+- Advanced ML / Neural Network Recommendations (Future)
+
 

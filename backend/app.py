@@ -11,6 +11,7 @@ from .routes.transactions import transactions_bp
 from .routes.reviews import reviews_bp
 from .routes.reports import reports_bp
 from .routes.admin import admin_bp
+from .routes.recommendations import recommendations_bp
 from .errors import register_error_handlers
 
 
@@ -45,6 +46,7 @@ def create_app(config_class=Config):
     app.register_blueprint(reviews_bp, url_prefix='/api/v1/reviews')
     app.register_blueprint(reports_bp, url_prefix='/api/v1/reports')
     app.register_blueprint(admin_bp, url_prefix='/api/v1/admin')
+    app.register_blueprint(recommendations_bp, url_prefix='/api/v1/recommendations')
 
     # Register error handlers
     register_error_handlers(app)

@@ -103,6 +103,23 @@ def get_my_products():
     except Exception as e:
         return error_response(code="DATABASE_ERROR", message="Failed to retrieve your products.", status_code=500)
 
+@products_bp.route('/popular', methods=['GET'])
+def get_popular_products_route():
+    """Retrieve popular products based on demand signals (wishlists, requests, transactions)."""
+    try:
+        limit = int(request.args.get('limit', 10))
+        if limit < 1: limit = 10
+        if limit > 50: limit = 50
+    except ValueError:
+        return error_response(code="INVALID_LIMIT", message="Limit must be a positive integer.", status_code=400)
+
+    try:
+        from backend.services.smart_service import get_popular_products
+        items = get_popular_products(limit=limit)
+        return success_response(data={'items': items, 'count': len(items)})
+    except Exception as e:
+        return error_response(code="DATABASE_ERROR", message="Failed to retrieve popular products.", status_code=500)
+
 @products_bp.route('/<product_id>', methods=['GET'])
 def get_product(product_id):
     """Retrieve a single product by ID."""
@@ -114,6 +131,37 @@ def get_product(product_id):
         return error_response(code="NOT_FOUND", message="Product has been removed.", status_code=404)
         
     return success_response(data=_format_product(product))
+
+@products_bp.route('/<product_id>/related', methods=['GET'])
+def get_related_products_route(product_id):
+    """Retrieve products related to a specific product with explainable ranking logic."""
+    try:
+        limit = int(request.args.get('limit', 10))
+        if limit < 1: limit = 10
+        if limit > 50: limit = 50
+    except ValueError:
+        return error_response(code="INVALID_LIMIT", message="Limit must be a positive integer.", status_code=400)
+
+    try:
+        from backend.services.smart_service import get_related_products
+        items = get_related_products(product_id, limit=limit)
+        if items is None:
+            return error_response(code="NOT_FOUND", message="Product not found.", status_code=404)
+        return success_response(data={'items': items, 'count': len(items)})
+    except Exception as e:
+        return error_response(code="DATABASE_ERROR", message="Failed to retrieve related products.", status_code=500)
+
+@products_bp.route('/<product_id>/price-insights', methods=['GET'])
+def get_price_insights_route(product_id):
+    """Retrieve historical pricing insights for a specific product."""
+    try:
+        from backend.services.smart_service import get_price_insights
+        insights = get_price_insights(product_id)
+        if insights is None:
+            return error_response(code="NOT_FOUND", message="Product not found.", status_code=404)
+        return success_response(data=insights)
+    except Exception as e:
+        return error_response(code="DATABASE_ERROR", message="Failed to retrieve price insights.", status_code=500)
 
 def _validate_image_url(url):
     pattern = r'^https?://[^\s/$.?#].[^\s]*$'
