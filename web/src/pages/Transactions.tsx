@@ -33,8 +33,8 @@ export const Transactions: React.FC = () => {
         transactionService.getMyTransactions(),
         transactionService.getReceivedTransactions(),
       ]);
-      setPurchases(mineRes.transactions || []);
-      setSales(recRes.transactions || []);
+      setPurchases(mineRes.items || mineRes.transactions || []);
+      setSales(recRes.items || recRes.transactions || []);
     } catch (err: any) {
       setError(err.message || 'Failed to load transactions.');
     } finally {

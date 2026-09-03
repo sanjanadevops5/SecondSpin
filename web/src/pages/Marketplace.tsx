@@ -59,6 +59,17 @@ export const Marketplace: React.FC = () => {
       .catch(() => setCategories(DEFAULT_CATEGORIES));
   }, []);
 
+  // Sync state when URL searchParams change
+  useEffect(() => {
+    setSearch(searchParams.get('search') || '');
+    setSelectedCategory(searchParams.get('category') || '');
+    setSelectedCondition(searchParams.get('condition') || '');
+    setMinPrice(searchParams.get('min_price') || '');
+    setMaxPrice(searchParams.get('max_price') || '');
+    setSort((searchParams.get('sort') as any) || 'newest');
+    setPage(parseInt(searchParams.get('page') || '1'));
+  }, [searchParams]);
+
   // Fetch products whenever filters change
   const fetchProducts = async () => {
     try {
@@ -89,7 +100,8 @@ export const Marketplace: React.FC = () => {
 
       if (isAuthenticated) {
         const wishRes = await wishlistService.getWishlist();
-        const ids = new Set((wishRes.wishlist || []).map((w) => w.product_id));
+        const rawItems = (wishRes as any).items || wishRes.wishlist || [];
+        const ids = new Set<string>(rawItems.map((w: any) => String(w.product_id)));
         setWishlistIds(ids);
       }
     } catch (err: any) {

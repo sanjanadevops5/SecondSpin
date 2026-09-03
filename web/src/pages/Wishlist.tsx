@@ -15,7 +15,7 @@ export const Wishlist: React.FC = () => {
       setLoading(true);
       setError(null);
       const res = await wishlistService.getWishlist();
-      setItems(res.wishlist || []);
+      setItems((res as any).items || res.wishlist || []);
     } catch (err: any) {
       setError(err.message || 'Failed to load wishlist.');
     } finally {

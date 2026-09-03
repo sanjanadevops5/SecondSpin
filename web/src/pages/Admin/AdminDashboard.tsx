@@ -43,10 +43,10 @@ export const AdminDashboard: React.FC = () => {
         adminService.getCategories(),
       ]);
 
-      setUsers(usersRes.users || []);
-      setProducts(prodsRes.products || []);
-      setReports(reportsRes.reports || []);
-      setCategories(catsRes.categories || []);
+      setUsers(usersRes.items || usersRes.users || []);
+      setProducts(prodsRes.items || prodsRes.products || []);
+      setReports(reportsRes.items || reportsRes.reports || []);
+      setCategories(catsRes.items || catsRes.categories || []);
     } catch (err) {
       console.error('Failed to load admin dashboard data:', err);
     } finally {
@@ -68,7 +68,7 @@ export const AdminDashboard: React.FC = () => {
       loadData();
     } catch (err: any) {
       alert(err.message || 'Failed to update user status.');
-    } fontally: {
+    } finally {
       setActionLoading(null);
     }
   };

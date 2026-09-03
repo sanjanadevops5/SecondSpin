@@ -52,7 +52,8 @@ export const Home: React.FC = () => {
             setRecommendations(recRes.items || []);
 
             const wishRes = await wishlistService.getWishlist();
-            const ids = new Set((wishRes.wishlist || []).map((w) => w.product_id));
+            const rawWish = (wishRes as any).items || wishRes.wishlist || [];
+            const ids = new Set<string>(rawWish.map((w: any) => String(w.product_id)));
             setWishlistIds(ids);
           } catch (e) {
             console.warn('Recommendations fetch warning:', e);
@@ -103,7 +104,7 @@ export const Home: React.FC = () => {
   const categoryCards = [
     { name: 'Textbooks', slug: 'textbooks', icon: BookOpen, color: 'bg-emerald-500/10 text-emerald-600' },
     { name: 'Electronics', slug: 'electronics', icon: Laptop, color: 'bg-blue-500/10 text-blue-600' },
-    { name: 'Calculators', slug: 'calculators', icon: Calculator, color: 'bg-amber-500/10 text-amber-600' },
+    { name: 'Calculators', slug: 'scientific-calculators', icon: Calculator, color: 'bg-amber-500/10 text-amber-600' },
     { name: 'Bicycles', slug: 'bicycles', icon: Bike, color: 'bg-purple-500/10 text-purple-600' },
     { name: 'Hostel Essentials', slug: 'hostel-essentials', icon: HomeIcon, color: 'bg-rose-500/10 text-rose-600' },
     { name: 'All Categories', slug: '', icon: Package, color: 'bg-slate-500/10 text-slate-600' },

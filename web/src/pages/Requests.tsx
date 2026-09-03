@@ -23,8 +23,8 @@ export const Requests: React.FC = () => {
         requestService.getMyRequests(),
         requestService.getReceivedRequests(),
       ]);
-      setMyRequests(mineRes.requests || []);
-      setReceivedRequests(recRes.requests || []);
+      setMyRequests(mineRes.items || mineRes.requests || []);
+      setReceivedRequests(recRes.items || recRes.requests || []);
     } catch (err: any) {
       setError(err.message || 'Failed to load purchase requests.');
     } finally {

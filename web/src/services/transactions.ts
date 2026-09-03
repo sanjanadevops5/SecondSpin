@@ -6,12 +6,12 @@ export const transactionService = {
     return api.post('/transactions/', { purchase_request_id });
   },
 
-  async getMyTransactions(): Promise<{ transactions: Transaction[]; count: number }> {
-    return api.get<{ transactions: Transaction[]; count: number }>('/transactions/mine');
+  async getMyTransactions(): Promise<{ items: Transaction[]; transactions?: Transaction[]; count?: number }> {
+    return api.get<{ items: Transaction[]; transactions?: Transaction[]; count?: number }>('/transactions/mine');
   },
 
-  async getReceivedTransactions(): Promise<{ transactions: Transaction[]; count: number }> {
-    return api.get<{ transactions: Transaction[]; count: number }>('/transactions/received');
+  async getReceivedTransactions(): Promise<{ items: Transaction[]; transactions?: Transaction[]; count?: number }> {
+    return api.get<{ items: Transaction[]; transactions?: Transaction[]; count?: number }>('/transactions/received');
   },
 
   async getTransactionDetail(id: string): Promise<Transaction> {
@@ -19,14 +19,14 @@ export const transactionService = {
   },
 
   async reserveTransaction(id: string): Promise<{ message: string }> {
-    return api.post(`/transactions/${id}/reserve`);
+    return api.patch(`/transactions/${id}/reserve`);
   },
 
   async completeTransaction(id: string): Promise<{ message: string }> {
-    return api.post(`/transactions/${id}/complete`);
+    return api.patch(`/transactions/${id}/complete`);
   },
 
   async cancelTransaction(id: string): Promise<{ message: string }> {
-    return api.post(`/transactions/${id}/cancel`);
+    return api.patch(`/transactions/${id}/cancel`);
   },
 };

@@ -42,7 +42,7 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/marketplace?category=calculators" className="hover:text-emerald-400 transition-colors">
+                <Link to="/marketplace?category=scientific-calculators" className="hover:text-emerald-400 transition-colors">
                   Graphing Calculators
                 </Link>
               </li>

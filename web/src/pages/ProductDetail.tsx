@@ -80,7 +80,8 @@ export const ProductDetail: React.FC = () => {
         if (isAuthenticated) {
           try {
             const wishRes = await wishlistService.getWishlist();
-            const exists = (wishRes.wishlist || []).some((w) => w.product_id === id);
+            const rawWish = (wishRes as any).items || wishRes.wishlist || [];
+            const exists = rawWish.some((w: any) => w.product_id === id);
             setIsWishlisted(exists);
           } catch (e) {
             console.warn('Wishlist check warning:', e);
@@ -222,7 +223,7 @@ export const ProductDetail: React.FC = () => {
           <div>
             <div className="flex items-center justify-between gap-2 mb-2">
               <span className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-emerald-600">
-                <Tag size={14} /> {product.category_id}
+                <Tag size={14} /> {product.category_id.replace(/-/g, ' ')}
               </span>
               <button
                 onClick={handleWishlistToggle}
