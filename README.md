@@ -1,109 +1,81 @@
-# SecondSpin ♻️
+# SecondSpin — Campus-Exclusive Marketplace Platform
 
-**The Campus-Exclusive Marketplace for College Students**
-
-## Purpose
-SecondSpin is a dedicated, secure, and intuitive marketplace designed specifically for college students. It provides a platform to seamlessly buy, sell, and exchange pre-owned items—such as textbooks, electronics, bicycles, and hostel essentials—within their trusted college community. 
-
-## Context
-College students frequently need to buy course materials and living essentials for short-term use, and later need to sell them when they graduate or finish a semester. Generic marketplaces (like Craigslist or Facebook Marketplace) lack campus-specific trust, involve logistical hurdles for item handover, and often expose students to scams. SecondSpin solves this by restricting access to verified students, enabling safe, on-campus transactions.
-
-## Product Architecture Snapshot
-- **Backend:** Python Flask REST API
-- **Database:** MongoDB Atlas
-- **Frontends:** 
-  - Responsive Web Application
-  - Flutter Mobile Application (iOS & Android)
-
-*(Both frontends consume the exact same Flask REST API and MongoDB database).*
-
-## Current Status
-- [x] Phase 0: Product Definition
-- [x] Phase 1: Engineering Foundation
-- [x] Phase 2: MongoDB Data Architecture
-- [x] Phase 3: Flask REST API Foundation
-- [x] Phase 4: Authentication & Security
-- [x] Phase 5: Marketplace/Product Module
-- [x] Phase 6: Wishlist & Purchase Requests
-- [ ] Phase 7: Mobile Application Foundation (Flutter)
-- [ ] Phase 8: Web Application Foundation (React/Vue/etc.)
-
-## Future Considerations
-While our immediate focus is on delivering a robust MVP for a single campus, SecondSpin is architected with scalability in mind. Future features may include AI-based product recommendations, ML price predictions, QR-based transaction verification, and expansion to a multi-campus network.
+**SecondSpin** is a full-stack campus-exclusive marketplace platform built specifically for college students to buy, sell, and exchange pre-owned student essentials such as textbooks, scientific calculators, laptops, bicycles, hostel gear, lab equipment, and sports gear.
 
 ---
 
-## Local Setup and Development
+## Architecture Overview
 
-### Prerequisites
-- Python 3.9+
-- MongoDB Atlas cluster (or local MongoDB)
-
-### Repository Structure
-- `backend/`: Python Flask REST API
-- `web/`: Responsive Web Application (Planned)
-- `mobile/`: Flutter Mobile Application (Planned)
-- `database/`: Database scripts and schemas (Planned)
-- `tests/`: Automated test suite
-- `docs/`: Foundational product documentation
-
-### Installation
-1. Clone the repository.
-2. Create and activate a Python virtual environment:
-   ```bash
-   python -m venv venv
-   # Windows:
-   venv\Scripts\activate
-   # macOS/Linux:
-   source venv/bin/activate
-   ```
-3. Install dependencies:
-   ```bash
-   pip install -r backend/requirements.txt
-   ```
-4. Configure environment:
-   Copy `.env.example` to `.env` and fill in your values. Do not commit `.env`.
-
-### Running the Backend
-From the root directory:
-
-**Windows (Command Prompt):**
-```cmd
-set FLASK_APP=backend.app
-set FLASK_ENV=development
-flask run
+```
+                      ┌─── React 19 Responsive Web Application (Vite 8)
+                      │
+                      ▼
+               Flask REST API (/api/v1)
+                      │
+                      ▼
+               MongoDB Atlas
+                      ▲
+                      │
+                      └─── Flutter Mobile Application (iOS & Android)
 ```
 
-**Windows (PowerShell):**
+Both the **React Web Application** and **Flutter Mobile Application** communicate with the central **Flask REST API**, sharing authentication, data models, business rules, and MongoDB persistence.
+
+---
+
+## Core Product Capabilities
+
+- **Authentication & Security**: Student email validation (`@univ.edu`), PBKDF2/Bcrypt password hashing, JWT Bearer tokens, and Role-Based Access Control (`STUDENT` / `ADMIN`).
+- **Marketplace Engine**: Listing creation, image management, category taxonomy, condition grading (`NEW`, `LIKE_NEW`, `GOOD`, `FAIR`, `POOR`), price filtering, multi-field search, sorting, and status lifecycle (`ACTIVE`, `RESERVED`, `SOLD`, `REMOVED`).
+- **Saved Wishlist**: Instant add/remove wishlist management with duplicate prevention.
+- **Purchase Request Hub**: Buyer purchase request submission, seller accept/reject controls, buyer cancellation.
+- **Transaction Lifecycle**: Seamless transition from accepted request to transaction (`PENDING` -> `RESERVED` -> `COMPLETED`).
+- **Reviews & Ratings**: 1–5 star rating system and student seller reviews upon completed transactions.
+- **Smart Marketplace Features**: Rule-driven Related Products, Trending Items, Historical Price Insights, and Personalized Recommendations with cold-start fallbacks.
+- **Admin Control Center**: Real-time platform analytics metrics, user account moderation (suspend/unsuspend), listing moderation, and report resolution.
+
+---
+
+## Project Structure
+
+```
+SecondSpin/
+├── backend/                  # Flask REST API source code & blueprints
+├── web/                      # React 19 + TypeScript + Vite web app
+├── mobile/                   # Flutter mobile app
+├── database/                 # MongoDB schema specifications & indexes
+├── docs/                     # PRD, Architecture, API Guide, Demo Guide
+├── scripts/                  # Demo seeding & index setup scripts
+├── tests/                    # Backend regression test suite (196 tests)
+└── venv/                     # Python virtual environment
+```
+
+---
+
+## Quick Start & Local Demo Instructions
+
+### 1. Seed Demo Data
 ```powershell
-$env:FLASK_APP="backend.app"
-$env:FLASK_ENV="development"
-flask run
+venv\Scripts\python.exe scripts/seed_demo.py
 ```
 
-**macOS / Linux:**
-```bash
-export FLASK_APP=backend.app
-export FLASK_ENV=development
-flask run
+### 2. Start Backend API
+```powershell
+venv\Scripts\python.exe -m backend.app
 ```
+- **API Base URL**: `http://127.0.0.1:5000/api/v1`
+- **Health Endpoint**: `http://127.0.0.1:5000/api/v1/health`
 
-*(Alternatively, you can just run `python -m backend.app` on any platform).*
-
-The health endpoint will be available at `http://127.0.0.1:5000/api/health`.
-
-### Running Tests
-Execute the independent test suite using pytest from the repository root:
-```bash
-pytest tests/
+### 3. Start Web Application
+```powershell
+cd web
+npm run dev
 ```
+- **Web App URL**: `http://localhost:3000`
 
----
-
-### Documentation
-For detailed product specifications, architecture, and development plans, please refer to the `docs/` directory:
-- [Product Requirements Document (PRD)](docs/PRD.md)
-- [Project Scope](docs/PROJECT_SCOPE.md)
-- [Features List](docs/FEATURES.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Development Plan](docs/DEVELOPMENT_PLAN.md)
+### 4. Local Demo Accounts (Password: `Password123!`)
+- **Admin**: `admin@demo.secondspin.local`
+- **Seller 1**: `seller1@demo.secondspin.local` (Aarav Mehta)
+- **Seller 2**: `seller2@demo.secondspin.local` (Riya Sharma)
+- **Buyer 1**: `buyer1@demo.secondspin.local` (Kabir Singh)
+- **Buyer 2**: `buyer2@demo.secondspin.local` (Ananya Patel)
